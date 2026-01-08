@@ -1,0 +1,137 @@
+<app-banner title="Edit Course"></app-banner>
+
+<form #courseForm="ngForm" (ngSubmit)="editCourse(courseForm)">
+  <div class="container">
+    <hr />
+
+    <!-- Course Name -->
+    <div class="form-group mb-3">
+      <label><b>Course Name</b></label>
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="obj.name"
+        required
+        minlength="3"
+        class="form-control"
+        placeholder="Enter Course Name"
+      />
+      <div *ngIf="courseForm.submitted || courseForm.controls['name']?.touched">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['name']?.errors?.['required']"
+        >
+          Course name is required
+        </small>
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['name']?.errors?.['minlength']"
+        >
+          Minimum 3 characters
+        </small>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group mb-3">
+      <label><b>Description</b></label>
+      <textarea
+        name="description"
+        [(ngModel)]="obj.description"
+        required
+        minlength="10"
+        class="form-control"
+        placeholder="Enter Course Description"
+      ></textarea>
+      <div
+        *ngIf="
+          courseForm.submitted || courseForm.controls['description']?.touched
+        "
+      >
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['description']?.errors?.['required']"
+        >
+          Description is required
+        </small>
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['description']?.errors?.['minlength']"
+        >
+          Minimum 10 characters
+        </small>
+      </div>
+    </div>
+
+    <!-- Duration -->
+    <div class="form-group mb-3">
+      <label><b>Duration (hours)</b></label>
+      <input
+        type="number"
+        name="duration"
+        [(ngModel)]="obj.duration"
+        required
+        min="1"
+        class="form-control"
+        placeholder="Enter Course Duration"
+      />
+      <div
+        *ngIf="courseForm.submitted || courseForm.controls['duration']?.touched"
+      >
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['duration']?.errors?.['required']"
+        >
+          Duration is required
+        </small>
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['duration']?.errors?.['min']"
+        >
+          Duration must be at least 1 hour
+        </small>
+      </div>
+    </div>
+
+    <!-- Subject / Type -->
+    <div class="form-group mb-3">
+      <label><b>Subject</b></label>
+      <select name="type" [(ngModel)]="obj.type" required class="form-control">
+        <option value="">-- Select Subject --</option>
+        <option>Mathematics</option>
+        <option>Physics</option>
+        <option>Chemistry</option>
+        <option>Biology</option>
+        <option>Computer Science</option>
+        <option>English Language</option>
+        <option>French Language</option>
+        <option>Arabic Language</option>
+        <option>History & Geography</option>
+        <option>Physical Education</option>
+        <option>Philosophy</option>
+      </select>
+      <div *ngIf="courseForm.submitted || courseForm.controls['type']?.touched">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['type']?.errors?.['required']"
+        >
+          Subject is required
+        </small>
+      </div>
+    </div>
+
+    <!-- Image Upload -->
+    <!-- <div class="form-group mb-3">
+      <label><b>Course Image</b></label>
+      <input type="file" name="image" ngModel required accept="image/*" class="form-control" />
+      <div *ngIf="courseForm.submitted || courseForm.controls['image']?.touched">
+        <small class="text-danger" *ngIf="courseForm.controls['image']?.errors?.['required']">
+          Course image is required
+        </small>
+      </div>
+    </div> -->
+
+    <hr />
+    <button type="submit" class="registerbtn">Edit Course</button>
+  </div>
+</form>

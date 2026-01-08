@@ -1,0 +1,67 @@
+<app-banner title="Login"></app-banner>
+
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div class="container">
+    <hr />
+    <!-- ========== Phone Number Field ========== -->
+    <div class="form-group mb-3">
+      <label><b>Phone Number</b></label>
+      <input
+        type="text"
+        formControlName="tel"
+        class="form-control"
+        placeholder="Enter Phone Number"
+      />
+      <div
+        *ngIf="
+          loginForm.controls['tel'].invalid &&
+          (loginForm.controls['tel'].touched ||
+            loginForm.controls['tel'].dirty)
+        "
+      >
+        <small
+          class="text-danger"
+          *ngIf="loginForm.controls['tel'].errors?.['required']"
+          >Phone is required</small
+        >
+        <small
+          class="text-danger"
+          *ngIf="loginForm.controls['tel'].errors?.['pattern']"
+          >Phone must be 8 digits</small
+        >
+      </div>
+    </div>
+    <!-- ========== Password Field ========== -->
+    <div class="form-group mb-3">
+      <label><b>Password</b></label>
+      <input
+        type="password"
+        formControlName="password"
+        class="form-control"
+        placeholder="Enter Password"
+      />
+      <div
+        *ngIf="
+          loginForm.controls['password'].invalid &&
+          loginForm.controls['password'].touched
+        "
+      >
+        <small
+          class="text-danger"
+          *ngIf="loginForm.controls['password'].errors?.['required']"
+          >Password is required</small
+        >
+
+        <small
+          class="text-danger"
+          *ngIf="loginForm.controls['password'].errors?.['pattern']"
+          >Upper, Lower and Number required</small
+        >
+      </div>
+    </div>
+    <hr />
+    <!-- ========== Submit Button ========== -->
+    <button type="submit" class="registerbtn">Login Teacher</button>
+    <small class="text-danger">{{ errorMessage }}</small>
+  </div>
+</form>

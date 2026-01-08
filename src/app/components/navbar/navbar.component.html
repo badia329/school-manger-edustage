@@ -1,0 +1,84 @@
+<header class="header_area">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <a class="navbar-brand logo_h" href="index.html"
+        ><img src="img/logo.png" alt=""
+      /></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="icon-bar"></span> <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+        <ul class="nav navbar-nav menu_nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Home</a>
+          </li>
+
+          <li class="nav-item" *ngIf="currentUser?.role === 'parent' || currentUser?.role ">
+            <a class="nav-link" routerLink="courses">Courses</a>
+          </li>
+          <li class="nav-item" *ngIf="currentUser?.role === 'teacher'">
+            <a class="nav-link" routerLink="addCourse">Add Course</a>
+          </li>
+          <li class="nav-item" *ngIf="currentUser?.role === 'teacher'">
+            <a class="nav-link" routerLink="dashboardTeacher"
+              > Dashboard</a
+            >
+          </li>
+
+          <li class="nav-item" *ngIf="currentUser?.role === 'admin'">
+            <a class="nav-link" routerLink="dashboardAdmin">Dashboard</a>
+          </li>
+
+          <!-- Student dashboard -->
+          <li class="nav-item" *ngIf="currentUser?.role === 'student'">
+            <a class="nav-link" routerLink="courseInfo"
+              >My Courses</a
+            >
+          </li>
+
+          <!-- Parent dashboard -->
+          <li class="nav-item" *ngIf="currentUser?.role === 'parent'">
+            <a class="nav-link" routerLink="dashboradParent"
+              >Dashboard</a
+            >
+          </li>
+
+          <li class="nav-item submenu dropdown" *ngIf="!currentUser">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+              >Sign Up</a
+            >
+
+            <ul class="dropdown-menu">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="signupTeacher">Teacher</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="signupStudent">Student</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="signupParent">Parent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item" *ngIf="!currentUser">
+            <a class="nav-link" routerLink="login">Login</a>
+          </li>
+          <li class="nav-item" *ngIf="currentUser">
+            <a class="nav-link btn" (click)="logout()">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

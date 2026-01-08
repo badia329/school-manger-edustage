@@ -1,0 +1,106 @@
+<app-banner title="Dashboard Teacher"></app-banner>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button
+      class="nav-link active"
+      id="nav-home-tab"
+      data-toggle="tab"
+      data-target="#nav-home"
+      type="button"
+      role="tab"
+      aria-controls="nav-home"
+      aria-selected="true"
+    >
+      Students
+    </button>
+    <button
+      class="nav-link"
+      id="nav-profile-tab"
+      data-toggle="tab"
+      data-target="#nav-profile"
+      type="button"
+      role="tab"
+      aria-controls="nav-profile"
+      aria-selected="false"
+    >
+      Courses
+    </button>
+    <button
+      class="nav-link"
+      id="nav-contact-tab"
+      data-toggle="tab"
+      data-target="#nav-contact"
+      type="button"
+      role="tab"
+      aria-controls="nav-contact"
+      aria-selected="false"
+    >
+      Contact
+    </button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div
+    class="tab-pane fade show active"
+    id="nav-home"
+    role="tabpanel"
+    aria-labelledby="nav-home-tab"
+  >
+    studen lsirt t
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-profile"
+    role="tabpanel"
+    aria-labelledby="nav-profile-tab"
+  >
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Duration</th>
+          <th>Type</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses">
+          <td>{{ course.name }}</td>
+          <td>{{ course.description }}</td>
+          <td>{{ course.duration }} hrs</td>
+          <td>{{ course.type }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="infoCourse(course.idCourse)"
+            >
+              info
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              (click)="editCourse(course.idCourse)"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              (click)="deleteCourse(course.idCourse)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-contact"
+    role="tabpanel"
+    aria-labelledby="nav-contact-tab"
+  ></div>
+</div>

@@ -1,3 +1,37 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { CoursesComponent } from './components/courses/courses.component';
+import { TeachersComponent } from './components/teachers/teachers.component';
+import { TeacherSignupComponent } from './components/signup/teacher-signup/teacher-signup.component';
+import { StudentSignupComponent } from './components/signup/student-signup/student-signup.component';
+import { ParentSignupComponent } from './components/signup/parent-signup/parent-signup.component';
+import { LoginComponent } from './components/signup/login/login.component';
+import { ParentDashboardComponent } from './components/dashboard/parent-dashboard/parent-dashboard.component';
+import { AdminDashboardComponent } from './components/dashboard/admin-dashboard/admin-dashboard.component';
+import { StudentDashboardComponent } from './components/dashboard/student-dashboard/student-dashboard.component';
+import { TeacherDashboardComponent } from './components/dashboard/teacher-dashboard/teacher-dashboard.component';
+import { AddCourseComponent } from './components/add-course/add-course.component';
+import { EditCourseComponent } from './components/edit-course/edit-course.component';
+import { InfoCourseComponent } from './components/info-course/info-course.component';
+import { CourseInfoComponent } from './components/course-info/course-info.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'courses', component: CoursesComponent },
+  { path: 'teachers', component: TeachersComponent },
+  { path: 'signupTeacher', component: TeacherSignupComponent },
+  { path: 'signupStudent', component: StudentSignupComponent },
+  { path: 'signupParent', component: ParentSignupComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboardAdmin', component: AdminDashboardComponent },
+  { path: 'dashboardParent', component: ParentDashboardComponent },
+  { path: 'dashboardStudent', component: StudentDashboardComponent },
+  { path: 'dashboardTeacher', component: TeacherDashboardComponent },
+  { path: 'addCourse', component: AddCourseComponent },
+  { path: 'editCourse/:id', component: EditCourseComponent },
+  { path: 'infoCourse/:id', component: InfoCourseComponent },
+  { path: 'courseInfo', component: CourseInfoComponent },
+];
+
+
+

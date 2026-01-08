@@ -1,0 +1,79 @@
+<app-banner title="Register Student"></app-banner>
+
+<form [formGroup]="studentForm" (ngSubmit)="signup()">
+  <div class="container">
+    <p>Please fill in this form to create a student account.</p>
+    <hr />
+
+    <div class="form-group mb-3">
+      <label><b>First Name</b></label>
+      <input type="text" formControlName="firstName" class="form-control" placeholder="Enter First Name" />
+      <div *ngIf="studentForm.controls['firstName'].invalid && (studentForm.controls['firstName'].touched || studentForm.controls['firstName'].dirty)">
+        <small class="text-danger" *ngIf="studentForm.controls['firstName'].errors?.['required']">First Name is required</small>
+        <small class="text-danger" *ngIf="studentForm.controls['firstName'].errors?.['minlength']">Min 3 characters required</small>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label><b>Last Name</b></label>
+      <input type="text" formControlName="lastName" class="form-control" placeholder="Enter Last Name" />
+      <div *ngIf="studentForm.controls['lastName'].invalid && (studentForm.controls['lastName'].touched || studentForm.controls['lastName'].dirty)">
+        <small class="text-danger" *ngIf="studentForm.controls['lastName'].errors?.['required']">Last Name is required</small>
+        <small class="text-danger" *ngIf="studentForm.controls['lastName'].errors?.['minlength']">Min 3 characters required</small>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label><b>Email Address</b></label>
+      <input type="text" formControlName="email" class="form-control" placeholder="Enter Email" />
+      <div *ngIf="studentForm.controls['email'].invalid && (studentForm.controls['email'].touched || studentForm.controls['email'].dirty)">
+        <small class="text-danger" *ngIf="studentForm.controls['email'].errors?.['required']">Email is required</small>
+        <small class="text-danger" *ngIf="studentForm.controls['email'].errors?.['email']">Invalid email format</small>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label><b>Phone Number</b></label>
+      <input type="text" formControlName="tel" class="form-control" placeholder="Enter Phone Number" />
+      <div *ngIf="studentForm.controls['tel'].invalid && (studentForm.controls['tel'].touched || studentForm.controls['tel'].dirty)">
+        <small class="text-danger" *ngIf="studentForm.controls['tel'].errors?.['required']">Phone is required</small>
+        <small class="text-danger" *ngIf="studentForm.controls['tel'].errors?.['pattern']">Phone must be 8 digits</small>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label><b>Home Address</b></label>
+      <textarea formControlName="address" class="form-control" placeholder="Enter Full Address"></textarea>
+      <div *ngIf="studentForm.controls['address'].invalid && (studentForm.controls['address'].touched || studentForm.controls['address'].dirty)">
+        <small class="text-danger" *ngIf="studentForm.controls['address'].errors?.['required']">Address is required</small>
+        <small class="text-danger" *ngIf="studentForm.controls['address'].errors?.['minlength']">Address must be at least 10 characters</small>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label><b>Password</b></label>
+      <input type="password" formControlName="password" class="form-control" placeholder="Enter Password" />
+      <div *ngIf="studentForm.controls['password'].invalid && studentForm.controls['password'].touched">
+        <small class="text-danger" *ngIf="studentForm.controls['password'].errors?.['required']">Password is required</small>
+        <small class="text-danger" *ngIf="studentForm.controls['password'].errors?.['minlength']">Min 6 characters</small>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label><b>Repeat Password</b></label>
+      <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Repeat Password" />
+      <small class="text-danger" *ngIf="studentForm.controls['confirmPassword'].errors?.['required'] && studentForm.controls['confirmPassword'].touched">Confirm password is required</small>
+      <small class="text-danger" *ngIf="studentForm.errors?.['passwordMismatch'] && studentForm.controls['confirmPassword'].touched">Passwords do not match</small>
+    </div>
+
+    <!-- <div class="form-group mb-3">
+      <label><b>Profile Photo</b></label>
+      <input type="file" formControlName="image" class="form-control" accept="image/*" />
+      <small class="text-danger" *ngIf="studentForm.controls['image'].invalid && studentForm.controls['image'].touched">Profile photo is required</small>
+    </div> -->
+
+    <hr />
+    <button type="submit" class="registerbtn">Register Student</button>
+    <small class="text-danger">{{errorMessage}}</small>
+  </div>
+</form>

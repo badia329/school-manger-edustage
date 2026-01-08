@@ -1,0 +1,417 @@
+<app-banner title="Admin Dashboard"></app-banner>
+<div class="dashboard-container">
+  <!-- Page Title -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <p class="text-muted">Manage students, teachers and courses</p>
+    </div>
+  </div>
+
+  <!-- Main Content Tabs -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item">
+              <button
+                class="nav-link active"
+                data-bs-toggle="tab"
+                data-bs-target="#students-tab"
+              >
+                <i class="fas fa-user-graduate me-2"></i>Students
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#teachers-tab"
+              >
+                <i class="fas fa-chalkboard-teacher me-2"></i>Teachers
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#courses-tab"
+              >
+                <i class="fas fa-book me-2"></i>Courses
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#assign-tab"
+              >
+                <i class="fas fa-link me-2"></i>Assign Students
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-body">
+          <div class="tab-content">
+            <!-- Students Tab -->
+            <div class="tab-pane fade show active" id="students-tab">
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h5 class="mb-0">All Students</h5>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Search students..."
+                  style="width: 250px"
+                />
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Address</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let student of students">
+                      <td>{{ student.id }}</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <span
+                            >{{ student.firstName }}
+                            {{ student.lastName }}</span
+                          >
+                        </div>
+                      </td>
+                      <td>{{ student.email }}</td>
+                      <td>{{ student.tel }}</td>
+                      <td>{{ student.address }}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-primary me-1"
+                        >
+                          <i class="fas fa-eye"></i> View
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="deleteUser(student.id)"
+                        >
+                          <i class="fas fa-trash"></i> Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Teachers Tab -->
+            <div class="tab-pane fade" id="teachers-tab">
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h5 class="mb-0">All Teachers</h5>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Search teachers..."
+                  style="width: 250px"
+                />
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Specialty</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let teacher of teachers">
+                      <td>{{ teacher.id }}</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <span
+                            >{{ teacher.firstName }}
+                            {{ teacher.lastName }}</span
+                          >
+                        </div>
+                      </td>
+                      <td>{{ teacher.address }}</td>
+                      <td>{{ teacher.tel }}</td>
+                      <td>
+                        <span class="badge bg-primary">{{
+                          teacher.specialty
+                        }}</span>
+                      </td>
+                      <td>
+                        <span
+                          [class]="
+                            teacher.isValidated
+                              ? 'badge bg-success'
+                              : 'badge bg-danger'
+                          "
+                        >
+                          {{
+                            teacher.isValidated ? "Validated" : "Not Validated"
+                          }}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          *ngIf="!teacher.isValidated"
+                          class="btn btn-sm btn-success me-1"
+                          (click)="validateTeacher(teacher.id)"
+                        >
+                          <i class="fas fa-check me-1"></i>Validate
+                        </button>
+
+                        <button
+                          class="btn btn-sm btn-danger"
+                          (click)="deleteUser(teacher.id)"
+                        >
+                          <i class="fas fa-times me-1"></i>Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Courses Tab -->
+            <div class="tab-pane fade" id="courses-tab">
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h5 class="mb-0">All Courses</h5>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Search courses..."
+                  style="width: 250px"
+                />
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Course Name</th>
+                      <th>Description</th>
+                      <th>Duration</th>
+                      <th>Teacher</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let course of courses">
+                      <td>
+                        <strong>{{ course.type }}</strong>
+                      </td>
+                      <td>{{ course.description }}</td>
+                      <td>{{ course.duration }}</td>
+                      <td>{{ getTeacherName(course.teacherId) }}</td>
+                      <td>
+                        <button
+                          (click)="infoCourse(course.idCourse)"
+                          class="btn btn-sm btn-outline-primary me-1"
+                        >
+                          <i class="fas fa-eye"></i> View
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger">
+                          <i class="fas fa-trash"></i> Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Assign Students Tab -->
+            <div class="tab-pane fade" id="assign-tab">
+              <h5 class="mb-4">Assign Students to Course</h5>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                      <h6 class="mb-0">Select Course & Teacher</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="mb-3">
+                        <label class="form-label">Course</label>
+                        <select class="form-select">
+                          <option selected disabled>Choose course...</option>
+                          <option
+                            *ngFor="let c of courses"
+                            [value]="c.idCourse"
+                          >
+                            {{ c.name }}
+                          </option>
+                        </select>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Teacher</label>
+                        <select class="form-select">
+                          <option selected disabled>Choose teacher...</option>
+                          <option *ngFor="let t of teachers" [value]="t.id">
+                            {{ t.firstName }} {{ t.lastName }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-header bg-success text-white">
+                      <h6 class="mb-0">Select Students</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Search students..."
+                        />
+                      </div>
+                      <div
+                        class="student-list"
+                        style="max-height: 300px; overflow-y: auto"
+                      >
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="student1"
+                          />
+                          <label class="form-check-label" for="student1">
+                            Ahmed Ali - #001
+                          </label>
+                        </div>
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="student2"
+                          />
+                          <label class="form-check-label" for="student2">
+                            Fatma Ben Salem - #002
+                          </label>
+                        </div>
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="student3"
+                          />
+                          <label class="form-check-label" for="student3">
+                            Mohamed Hamdi - #003
+                          </label>
+                        </div>
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="student4"
+                          />
+                          <label class="form-check-label" for="student4">
+                            Salma Khalil - #004
+                          </label>
+                        </div>
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="student5"
+                          />
+                          <label class="form-check-label" for="student5">
+                            Omar Ben Ali - #005
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center mt-4">
+                <button class="btn btn-primary btn-lg">
+                  <i class="fas fa-check me-2"></i>Assign Students to Course
+                </button>
+              </div>
+
+              <!-- Current Assignments -->
+              <div class="mt-5">
+                <h5 class="mb-3">Current Course Assignments</h5>
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Course</th>
+                        <th>Teacher</th>
+                        <th>Assigned Students</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Mathematics - Level 1</td>
+                        <td>Prof. Karim Mansour</td>
+                        <td>
+                          <span class="badge bg-info me-1">Ahmed Ali</span>
+                          <span class="badge bg-info me-1">Mohamed Hamdi</span>
+                          <span class="badge bg-info">Salma Khalil</span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i> Edit
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Physics - Advanced</td>
+                        <td>Dr. Amira Trabelsi</td>
+                        <td>
+                          <span class="badge bg-info me-1"
+                            >Fatma Ben Salem</span
+                          >
+                          <span class="badge bg-info">Omar Ben Ali</span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i> Edit
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
