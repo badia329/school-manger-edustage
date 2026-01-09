@@ -13,15 +13,17 @@ export class AddCourseComponent {
   addCourse(courseForm: any) {
     if (courseForm.valid) {
       const courses = JSON.parse(localStorage.getItem('courses') || '[]');
-      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const currentUser = JSON.parse(
+        localStorage.getItem('currentUser') || '{}'
+      );
 
       const newCourse = {
-        idCourse: Date.now(),
+        idCourse: String(Date.now()),
         name: courseForm.value.name,
         description: courseForm.value.description,
         duration: courseForm.value.duration,
         type: courseForm.value.type,
-        teacherId: currentUser.id 
+        teacherId: currentUser.id,
       };
 
       courses.push(newCourse);

@@ -14,6 +14,7 @@ import { AddCourseComponent } from './components/add-course/add-course.component
 import { EditCourseComponent } from './components/edit-course/edit-course.component';
 import { InfoCourseComponent } from './components/info-course/info-course.component';
 import { CourseInfoComponent } from './components/course-info/course-info.component';
+import { GradeComponent } from './components/grade/grade.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,7 +32,5 @@ export const routes: Routes = [
   { path: 'editCourse/:id', component: EditCourseComponent },
   { path: 'infoCourse/:id', component: InfoCourseComponent },
   { path: 'courseInfo', component: CourseInfoComponent },
+  { path: 'grade/:courseId/:studentId', component: GradeComponent },
 ];
-
-
-

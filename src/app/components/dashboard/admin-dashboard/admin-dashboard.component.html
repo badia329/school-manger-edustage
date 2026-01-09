@@ -250,35 +250,45 @@
               <h5 class="mb-4">Assign Students to Course</h5>
 
               <div class="row">
-                <div class="col-md-6">
-                  <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                      <h6 class="mb-0">Select Course & Teacher</h6>
-                    </div>
-                    <div class="card-body">
-                      <div class="mb-3">
-                        <label class="form-label">Course</label>
-                        <select class="form-select">
-                          <option selected disabled>Choose course...</option>
-                          <option
-                            *ngFor="let c of courses"
-                            [value]="c.idCourse"
-                          >
-                            {{ c.name }}
-                          </option>
-                        </select>
-                      </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Teacher</label>
+                    <select
+                      class="form-select"
+                      [(ngModel)]="selectedTeacherId"
+                      (change)="onTeacherChange()"
+                    >
+                      <option value="" selected disabled>
+                        Choose teacher...
+                      </option>
+                      <option
+                        *ngFor="let teacher of teachers"
+                        [value]="teacher.id"
+                      >
+                        {{ teacher.firstName }} {{ teacher.lastName }}
+                      </option>
+                    </select>
+                  </div>
 
-                      <div class="mb-3">
-                        <label class="form-label">Teacher</label>
-                        <select class="form-select">
-                          <option selected disabled>Choose teacher...</option>
-                          <option *ngFor="let t of teachers" [value]="t.id">
-                            {{ t.firstName }} {{ t.lastName }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
+                  <div class="mb-3">
+                    <label class="form-label">Course</label>
+                    <select class="form-select" [(ngModel)]="selectedCourseId">
+                      <option value="" selected disabled>
+                        Choose course...
+                      </option>
+                      <option
+                        *ngFor="let course of filteredCourses"
+                        [value]="course.idCourse"
+                      >
+                        {{ course.type }} ({{ course.name }})
+                      </option>
+                    </select>
+                    <small
+                      class="text-danger"
+                      *ngIf="selectedTeacherId && filteredCourses.length === 0"
+                    >
+                      This teacher has no assigned courses yet.
+                    </small>
                   </div>
                 </div>
 
@@ -295,59 +305,33 @@
                           placeholder="Search students..."
                         />
                       </div>
+
                       <div
                         class="student-list"
                         style="max-height: 300px; overflow-y: auto"
                       >
-                        <div class="form-check mb-2">
+                        <div
+                          class="form-check mb-2"
+                          *ngFor="let student of students"
+                        >
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            id="student1"
+                            [id]="'student' + student.id"
+                            [(ngModel)]="student.selected"
                           />
-                          <label class="form-check-label" for="student1">
-                            Ahmed Ali - #001
+                          <label
+                            class="form-check-label"
+                            [for]="'student' + student.id"
+                          >
+                            {{ student.firstName }} {{ student.lastName }} - #{{
+                              student.id
+                            }}
                           </label>
                         </div>
-                        <div class="form-check mb-2">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="student2"
-                          />
-                          <label class="form-check-label" for="student2">
-                            Fatma Ben Salem - #002
-                          </label>
-                        </div>
-                        <div class="form-check mb-2">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="student3"
-                          />
-                          <label class="form-check-label" for="student3">
-                            Mohamed Hamdi - #003
-                          </label>
-                        </div>
-                        <div class="form-check mb-2">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="student4"
-                          />
-                          <label class="form-check-label" for="student4">
-                            Salma Khalil - #004
-                          </label>
-                        </div>
-                        <div class="form-check mb-2">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="student5"
-                          />
-                          <label class="form-check-label" for="student5">
-                            Omar Ben Ali - #005
-                          </label>
+
+                        <div class="text-muted" *ngIf="students.length === 0">
+                          No students found.
                         </div>
                       </div>
                     </div>
@@ -356,13 +340,16 @@
               </div>
 
               <div class="text-center mt-4">
-                <button class="btn btn-primary btn-lg">
-                  <i class="fas fa-check me-2"></i>Assign Students to Course
+                <button
+                  class="btn btn-primary btn-lg"
+                  (click)="assignStudents()"
+                >
+                  Assign Students to Course
                 </button>
               </div>
 
               <!-- Current Assignments -->
-              <div class="mt-5">
+              <!-- <div class="mt-5">
                 <h5 class="mb-3">Current Course Assignments</h5>
                 <div class="table-responsive">
                   <table class="table table-bordered">
@@ -375,39 +362,30 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Mathematics - Level 1</td>
-                        <td>Prof. Karim Mansour</td>
+                      <tr *ngFor="let item of allAssignments">
+                        <td>{{ item.courseName }}</td>
+                        <td>{{ item.teacherName }}</td>
                         <td>
-                          <span class="badge bg-info me-1">Ahmed Ali</span>
-                          <span class="badge bg-info me-1">Mohamed Hamdi</span>
-                          <span class="badge bg-info">Salma Khalil</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-edit"></i> Edit
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Physics - Advanced</td>
-                        <td>Dr. Amira Trabelsi</td>
-                        <td>
-                          <span class="badge bg-info me-1"
-                            >Fatma Ben Salem</span
+                          <span
+                            class="badge bg-info me-1"
+                            *ngFor="let stdName of item.students"
                           >
-                          <span class="badge bg-info">Omar Ben Ali</span>
+                            {{ stdName }}
+                          </span>
                         </td>
                         <td>
-                          <button class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-edit"></i> Edit
+                          <button
+                            class="btn btn-sm btn-outline-danger"
+                            (click)="deleteAssignment(item.id)"
+                          >
+                            <i class="fas fa-trash"></i> Delete
                           </button>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
@@ -9,7 +14,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, BannerComponent],
   templateUrl: './parent-signup.component.html',
-  styleUrl: './parent-signup.component.css'
+  styleUrl: './parent-signup.component.css',
 })
 export class ParentSignupComponent {
   parentForm: FormGroup;
@@ -42,17 +47,21 @@ export class ParentSignupComponent {
   signup() {
     if (this.parentForm.valid) {
       const users = JSON.parse(localStorage.getItem('users') || '[]');
-      
+
       let childExists = false;
       for (let i = 0; i < users.length; i++) {
-        if (users[i].role === 'student' && users[i].tel === this.parentForm.value.childTel) {
+        if (
+          users[i].role === 'student' &&
+          users[i].tel === this.parentForm.value.childTel
+        ) {
           childExists = true;
           break;
         }
       }
 
       if (!childExists) {
-        this.errorMessage = "Child's phone number not found in our student list.";
+        this.errorMessage =
+          "Child's phone number not found in our student list.";
         return;
       }
 
@@ -71,8 +80,8 @@ export class ParentSignupComponent {
 
       const newParent = {
         ...this.parentForm.value,
-        id: Date.now(),
-        role: 'parent'
+        id: String(Date.now()),
+        role: 'parent',
       };
 
       users.push(newParent);

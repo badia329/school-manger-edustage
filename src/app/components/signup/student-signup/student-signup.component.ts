@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
@@ -9,7 +14,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, BannerComponent],
   templateUrl: './student-signup.component.html',
-  styleUrl: './student-signup.component.css'
+  styleUrl: './student-signup.component.css',
 })
 export class StudentSignupComponent {
   studentForm: FormGroup;
@@ -60,7 +65,7 @@ export class StudentSignupComponent {
 
       const newStudent = {
         ...this.studentForm.value,
-        id: Date.now(),
+        id: String(Date.now()),
         role: 'student',
       };
 

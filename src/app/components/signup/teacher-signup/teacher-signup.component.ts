@@ -57,7 +57,7 @@ export class TeacherSignupComponent {
       for (let i = 0; i < users.length; i++) {
         if (users[i].email === this.teacherForm.value.email) {
           emailExists = true;
-          break; 
+          break;
         }
       }
 
@@ -69,7 +69,7 @@ export class TeacherSignupComponent {
 
       const newTeacher = {
         ...this.teacherForm.value,
-        id: Date.now(),
+        id: String(Date.now()),
         role: 'teacher',
         isValidated: false,
       };

@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [BannerComponent, CommonModule],
+  imports: [BannerComponent, CommonModule, FormsModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css',
 })
@@ -14,6 +15,9 @@ export class AdminDashboardComponent {
   students: any = [];
   courses: any = [];
   currentUser: any = [];
+  selectedTeacherId: any = '';
+  filteredCourses: any = [];
+  selectedCourseId: any = '';
 
   constructor(private router: Router) {}
   ngOnInit() {
@@ -72,4 +76,95 @@ export class AdminDashboardComponent {
   infoCourse(id: number) {
     this.router.navigate(['/infoCourse', id]);
   }
+  onTeacherChange() {
+    console.log('Selected Teacher ID:', this.selectedTeacherId);
+    this.filteredCourses = [];
+    for (let course of this.courses) {
+      if (course.teacherId == this.selectedTeacherId) {
+        this.filteredCourses.push(course);
+      }
+    }
+    this.selectedCourseId = '';
+  }
+  // short way by fillter
+  //   onTeacherChange() {
+  //   this.filteredCourses = this.courses.filter((course: any) =>
+  //     course.teacherId == this.selectedTeacherId
+  //   );
+  //   this.selectedCourseId = '';
+  // }
+
+  assignStudents() {
+    if (this.selectedTeacherId === '' || this.selectedCourseId === '') {
+      alert('Choose teacher and course');
+      return;
+    }
+
+    let selectedStudents: any = [];
+
+    for (let i = 0; i < this.students.length; i++) {
+      if (this.students[i].selected === true) {
+        selectedStudents.push(this.students[i].id);
+      }
+    }
+
+    if (selectedStudents.length === 0) {
+      alert('Choose at least one student');
+      return;
+    }
+
+    let assignments = JSON.parse(
+      localStorage.getItem('courseAssignments') || '[]'
+    );
+
+    let found = false;
+
+    for (let i = 0; i < assignments.length; i++) {
+      if (
+        assignments[i].teacherId == this.selectedTeacherId &&
+        assignments[i].courseId == this.selectedCourseId
+      ) {
+        for (let j = 0; j < selectedStudents.length; j++) {
+          let exists = false;
+
+          for (let k = 0; k < assignments[i].students.length; k++) {
+            if (assignments[i].students[k] === selectedStudents[j]) {
+              exists = true;
+              break;
+            }
+          }
+
+          if (!exists) {
+            assignments[i].students.push(selectedStudents[j]);
+          }
+        }
+
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      let newAssignment: any = {};
+      newAssignment.teacherId = this.selectedTeacherId;
+      newAssignment.courseId = this.selectedCourseId;
+      newAssignment.students = selectedStudents;
+
+      assignments.push(newAssignment);
+    }
+
+    localStorage.setItem('courseAssignments', JSON.stringify(assignments));
+
+    // reset
+    this.selectedTeacherId = '';
+    this.selectedCourseId = '';
+
+    for (let i = 0; i < this.students.length; i++) {
+      this.students[i].selected = false;
+    }
+
+    alert('Assignment saved');
+  }
+
+  deleteAssignment(id: any) {}
 }

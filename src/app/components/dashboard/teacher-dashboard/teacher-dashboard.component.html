@@ -1,106 +1,176 @@
 <app-banner title="Dashboard Teacher"></app-banner>
-<nav>
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <button
-      class="nav-link active"
-      id="nav-home-tab"
-      data-toggle="tab"
-      data-target="#nav-home"
-      type="button"
-      role="tab"
-      aria-controls="nav-home"
-      aria-selected="true"
+
+<div class="container mt-4">
+
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <button
+        class="nav-link active"
+        id="nav-courses-tab"
+        data-toggle="tab"
+        data-target="#nav-courses"
+        type="button"
+        role="tab"
+        aria-controls="nav-courses"
+        aria-selected="true"
+      >
+        <i class="fas fa-book me-2"></i>My Courses
+      </button>
+      <button
+        class="nav-link"
+        id="nav-students-tab"
+        data-toggle="tab"
+        data-target="#nav-students"
+        type="button"
+        role="tab"
+        aria-controls="nav-students"
+        aria-selected="false"
+      >
+        <i class="fas fa-users me-2"></i>Students by Course
+      </button>
+    </div>
+  </nav>
+
+  <div class="tab-content p-4 bg-white" id="nav-tabContent">
+
+    <div
+      class="tab-pane fade show active"
+      id="nav-courses"
+      role="tabpanel"
+      aria-labelledby="nav-courses-tab"
     >
-      Students
-    </button>
-    <button
-      class="nav-link"
-      id="nav-profile-tab"
-      data-toggle="tab"
-      data-target="#nav-profile"
-      type="button"
-      role="tab"
-      aria-controls="nav-profile"
-      aria-selected="false"
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>My Courses</h4>
+        <button class="btn btn-primary" (click)="goToAddCourse()">
+          <i class="fas fa-plus me-2"></i>Add New Course
+        </button>
+      </div>
+
+      <div *ngIf="myCourses.length === 0" class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        You don't have any courses yet. Click "Add New Course" to create one.
+      </div>
+
+      <div *ngIf="myCourses.length > 0" class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Course Name</th>
+              <th>Description</th>
+              <th>Duration</th>
+              <th>Students Count</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let course of myCourses">
+              <td><strong>{{ course.name }}</strong></td>
+              <td>{{ course.description }}</td>
+              <td>{{ course.duration }} hours</td>
+              <td>
+                <span class="badge bg-info">
+                  {{ course.studentsCount }} students
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-primary me-1"
+                  (click)="viewCourse(course.idCourse)"
+                  title="View Details"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-success me-1"
+                  (click)="editCourse(course.idCourse)"
+                  title="Edit Course"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="deleteCourse(course.idCourse)"
+                  title="Delete Course"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="nav-students"
+      role="tabpanel"
+      aria-labelledby="nav-students-tab"
     >
-      Courses
-    </button>
-    <button
-      class="nav-link"
-      id="nav-contact-tab"
-      data-toggle="tab"
-      data-target="#nav-contact"
-      type="button"
-      role="tab"
-      aria-controls="nav-contact"
-      aria-selected="false"
-    >
-      Contact
-    </button>
+      <h4 class="mb-4">Students by Course</h4>
+
+      <div *ngIf="myCourses.length === 0" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        You need to create courses first before seeing students.
+      </div>
+
+      <div *ngFor="let course of myCourses" class="mb-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-book me-2"></i>{{ course.name }}
+            </h5>
+          </div>
+          <div class="card-body">
+
+            <div *ngIf="course.students.length === 0" class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i>
+              No students assigned to this course yet.
+            </div>
+
+            <div *ngIf="course.students.length > 0" class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let student of course.students">
+                    <td>
+                      <img
+                        [src]="student.profilePhoto || 'https://ui-avatars.com/api/?name=' + student.firstName + '+' + student.lastName"
+                        class="rounded-circle"
+                        width="40"
+                        height="40"
+                        alt="Student Photo">
+                    </td>
+                    <td>{{ student.firstName }} {{ student.lastName }}</td>
+                    <td>{{ student.email }}</td>
+                    <td>{{ student.phone }}</td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-success"
+                        (click)="giveGradeAndEvaluation(student.id, course.idCourse)"
+                      >
+                        <i class="fas fa-star me-1"></i>Give Grade
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
-</nav>
-<div class="tab-content" id="nav-tabContent">
-  <div
-    class="tab-pane fade show active"
-    id="nav-home"
-    role="tabpanel"
-    aria-labelledby="nav-home-tab"
-  >
-    studen lsirt t
-  </div>
-  <div
-    class="tab-pane fade"
-    id="nav-profile"
-    role="tabpanel"
-    aria-labelledby="nav-profile-tab"
-  >
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Duration</th>
-          <th>Type</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let course of courses">
-          <td>{{ course.name }}</td>
-          <td>{{ course.description }}</td>
-          <td>{{ course.duration }} hrs</td>
-          <td>{{ course.type }}</td>
-          <td>
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              (click)="infoCourse(course.idCourse)"
-            >
-              info
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-success"
-              (click)="editCourse(course.idCourse)"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-danger"
-              (click)="deleteCourse(course.idCourse)"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="nav-contact"
-    role="tabpanel"
-    aria-labelledby="nav-contact-tab"
-  ></div>
+
 </div>
