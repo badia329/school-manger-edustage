@@ -1,1 +1,71 @@
-<p>parent-dashboard works!</p>
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Children Courses</h2>
+
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3><i class="fas fa-search"></i> Search Children</h3>
+        </div>
+        <div class="card-body">
+          <form #searchForm="ngForm" (ngSubmit)="search(searchForm)">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                name="childNumber"
+                #childNumberInput="ngModel"
+                ngModel
+                required
+                class="form-control"
+                placeholder="Enter your child Number">
+              <button class="btn btn-primary" type="submit" [disabled]="searchForm.invalid">
+                Search
+              </button>
+            </div>
+            <div *ngIf="childNumberInput.invalid && childNumberInput.touched" class="text-danger">
+              Child number is required to search.
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div *ngIf="isSearched" class="mt-4">
+        <div *ngIf="selectedChild; else noChild">
+          <div class="card shadow mb-3">
+            <div class="card-header bg-success text-white">
+              <h4>Child Information</h4>
+            </div>
+            <div class="card-body">
+              <p><strong>Name:</strong> {{ selectedChild.firstName }} {{ selectedChild.lastName }}</p>
+              <p><strong>Phone:</strong> {{ selectedChild.number }}</p>
+              <p *ngIf="selectedChild.specialty"><strong>Specialty:</strong> {{ selectedChild.specialty }}</p>
+            </div>
+          </div>
+
+          <h3 class="mb-3">Course Details</h3>
+          <div *ngIf="childCourses.length > 0; else noCourses">
+            <div class="card p-3 mb-3 shadow-sm" *ngFor="let course of childCourses">
+              <h5>Course: {{ course.courseName }}</h5>
+              <p><strong>Teacher:</strong> {{ course.teacherName }}</p>
+              <hr>
+              <p><strong>Note:</strong> {{ course.grade }} / 20</p>
+              <p><strong>Évaluation:</strong> {{ course.evaluation }}</p>
+            </div>
+          </div>
+
+          <ng-template #noCourses>
+            <div class="alert alert-info">
+              No courses found for this child.
+            </div>
+          </ng-template>
+        </div>
+
+        <ng-template #noChild>
+          <div class="alert alert-warning mt-3">
+            No child found with this number. Please check the number and try again.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

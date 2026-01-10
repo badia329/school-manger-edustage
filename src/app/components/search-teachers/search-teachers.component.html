@@ -1,0 +1,47 @@
+<p>search-teachers works!</p>
+<app-banner title="Search teachers"></app-banner>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3><i class="fas fa-search"></i> Search Teachers</h3>
+        </div>
+        <div class="card-body">
+          <form #searchForm="ngForm" (ngSubmit)="search(searchForm)">
+            <div class="input-group mb-3">
+              <input 
+                type="text" 
+                name="specialty"
+                #specialtyInput="ngModel"
+                ngModel
+                required
+                class="form-control" 
+                placeholder="Enter specialty (e.g. Math, Physics)">
+              <button class="btn btn-primary" type="submit" [disabled]="searchForm.invalid">
+                Search
+              </button>
+            </div>
+            <div *ngIf="specialtyInput.invalid && specialtyInput.touched" class="text-danger">
+              Specialty is required to search.
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-4" *ngIf="filteredTeachers.length > 0">
+        <h4>Results:</h4>
+        <ul class="list-group">
+          <li *ngFor="let t of filteredTeachers" class="list-group-item">
+            {{ t.firstName }} {{ t.lastName }} - <strong>{{ t.specialty }}</strong>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="alert alert-warning mt-3" *ngIf="isSearched && filteredTeachers.length === 0">
+        No teachers found for this specialty.
+      </div>
+    </div>
+  </div>
+</div>
