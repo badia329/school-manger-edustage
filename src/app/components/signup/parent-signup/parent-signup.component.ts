@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -12,13 +13,14 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-parent-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, BannerComponent],
+  imports: [ReactiveFormsModule, CommonModule, BannerComponent, FormsModule],
   templateUrl: './parent-signup.component.html',
   styleUrl: './parent-signup.component.css',
 })
 export class ParentSignupComponent {
   parentForm: FormGroup;
   errorMessage: string = '';
+  childrenPhones: string[] = [''];
 
   constructor(private formBuilder: FormBuilder, private router: Router) {
     this.parentForm = this.formBuilder.group(
@@ -28,7 +30,6 @@ export class ParentSignupComponent {
         email: ['', [Validators.required, Validators.email]],
         tel: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
         address: ['', [Validators.required, Validators.minLength(10)]],
-        childTel: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]], // خاص بالولي
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
       },
@@ -36,6 +37,20 @@ export class ParentSignupComponent {
         validators: this.passwordMatchValidator,
       }
     );
+  }
+
+  addChild() {
+    this.childrenPhones.push('');
+  }
+
+  removeChild(index: number) {
+    if (this.childrenPhones.length > 1) {
+      this.childrenPhones.splice(index, 1);
+    }
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 
   passwordMatchValidator(control: any) {
@@ -46,22 +61,43 @@ export class ParentSignupComponent {
 
   signup() {
     if (this.parentForm.valid) {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-      let childExists = false;
-      for (let i = 0; i < users.length; i++) {
-        if (
-          users[i].role === 'student' &&
-          users[i].tel === this.parentForm.value.childTel
-        ) {
-          childExists = true;
+      
+      let allPhonesValid = true;
+      for (let i = 0; i < this.childrenPhones.length; i++) {
+        const phone = this.childrenPhones[i];
+        if (phone.length !== 8) {
+          allPhonesValid = false;
           break;
         }
       }
 
-      if (!childExists) {
-        this.errorMessage =
-          "Child's phone number not found in our student list.";
+      if (allPhonesValid === false) {
+        this.errorMessage = 'All children phone numbers must be 8 digits.';
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+      const notFoundPhones: string[] = [];
+      
+      for (let i = 0; i < this.childrenPhones.length; i++) {
+        const childPhone = this.childrenPhones[i];
+        let found = false;
+
+        for (let j = 0; j < users.length; j++) {
+          if (users[j].role === 'student' && users[j].tel === childPhone) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found === false) {
+          notFoundPhones.push(childPhone);
+        }
+      }
+
+      if (notFoundPhones.length > 0) {
+        this.errorMessage = 'These phone numbers not found: ' + notFoundPhones.join(', ');
         return;
       }
 
@@ -79,7 +115,14 @@ export class ParentSignupComponent {
       }
 
       const newParent = {
-        ...this.parentForm.value,
+        firstName: this.parentForm.value.firstName,
+        lastName: this.parentForm.value.lastName,
+        email: this.parentForm.value.email,
+        tel: this.parentForm.value.tel,
+        address: this.parentForm.value.address,
+        childrenPhones: this.childrenPhones,
+        password: this.parentForm.value.password,
+        confirmPassword: this.parentForm.value.confirmPassword,
         id: String(Date.now()),
         role: 'parent',
       };

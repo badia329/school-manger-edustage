@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-course-info',
+  selector: 'app-student-courses',
   imports: [CommonModule],
-  templateUrl: './course-info.component.html',
-  styleUrl: './course-info.component.css',
+  templateUrl: './student-courses.component.html',
+  styleUrl: './student-courses.component.css'
 })
-export class CourseInfoComponent {
-  courseAssignments: any = [];
+export class StudentCoursesComponent {
+ courseAssignments: any = [];
   currentUser: any = null;
   myCourse: any = [];
   grades: any = [];
@@ -16,12 +16,10 @@ export class CourseInfoComponent {
   constructor() {}
 
   ngOnInit() {
-    // 1. جلب البيانات من الـ LocalStorage
     this.courseAssignments = JSON.parse(localStorage.getItem('courseAssignments') || '[]');
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.grades = JSON.parse(localStorage.getItem('grades') || '[]'); // مهم جداً جلب الدرجات
 
-    // 2. استدعاء الدالة لملء مصفوفة myCourse
     this.loadData();
   }
 
@@ -37,10 +35,8 @@ export class CourseInfoComponent {
     for (let i = 0; i < this.courseAssignments.length; i++) {
       const assignment = this.courseAssignments[i];
 
-      // استخدام "==" بدلاً من "===" لتجنب مشاكل (string vs number)
       if (assignment.students && assignment.students.includes(studentId)) {
         
-        // جلب اسم الكورس
         let courseName = 'Unknown';
         for (let j = 0; j < courses.length; j++) {
           if (courses[j].idCourse == assignment.courseId) {
@@ -49,7 +45,6 @@ export class CourseInfoComponent {
           }
         }
 
-        // جلب اسم المعلم
         let teacherName = 'Unknown';
         for (let j = 0; j < users.length; j++) {
           if (users[j].id == assignment.teacherId) {
@@ -58,8 +53,7 @@ export class CourseInfoComponent {
           }
         }
 
-        // جلب العلامة والتقييم
-        let gradeValue = 'N/A'; // قيمة افتراضية في حال لم توجد درجة
+        let gradeValue = 'N/A'; 
         let evaluationValue = 'No evaluation yet';
         for (let j = 0; j < this.grades.length; j++) {
           const g = this.grades[j];

@@ -1,5 +1,5 @@
+import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit } from '@angular/core';
-
 declare var $: any;
 
 @Component({
@@ -7,10 +7,21 @@ declare var $: any;
   standalone: true,
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.css',
-  imports: []
+  imports: [CommonModule],
 })
 export class CoursesComponent implements AfterViewInit {
+  courses: any = [];
   ngAfterViewInit() {
+    setTimeout(() => {
+      this.initOwl();
+    }, 50);
+  }
+
+  ngOnInit() {
+    this.courses = JSON.parse(localStorage.getItem('courses') || '[]');
+  }
+
+  initOwl() {
     if (typeof $ !== 'undefined' && $.fn.owlCarousel) {
       if ($('.active_course').length) {
         $('.active_course').owlCarousel({
@@ -26,8 +37,8 @@ export class CoursesComponent implements AfterViewInit {
           responsive: {
             0: { items: 1, margin: 0 },
             991: { items: 2, margin: 30 },
-            1200: { items: 3, margin: 30 }
-          }
+            1200: { items: 3, margin: 30 },
+          },
         });
       }
     }

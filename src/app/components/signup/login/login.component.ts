@@ -57,7 +57,7 @@ export class LoginComponent {
       } else if (userFound.role === 'student') {
         this.router.navigate(['/dashboardStudent']);
       } else if (userFound.role === 'parent') {
-        this.router.navigate(['/dashboardParent']);
+        this.router.navigate(['/']);
       } else if (userFound.role === 'admin') {
         this.router.navigate(['/dashboardAdmin']);
       }

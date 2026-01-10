@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { CoursesComponent } from './components/courses/courses.component';
-import { TeachersComponent } from './components/teachers/teachers.component';
 import { TeacherSignupComponent } from './components/signup/teacher-signup/teacher-signup.component';
 import { StudentSignupComponent } from './components/signup/student-signup/student-signup.component';
 import { ParentSignupComponent } from './components/signup/parent-signup/parent-signup.component';
@@ -13,13 +12,13 @@ import { TeacherDashboardComponent } from './components/dashboard/teacher-dashbo
 import { AddCourseComponent } from './components/add-course/add-course.component';
 import { EditCourseComponent } from './components/edit-course/edit-course.component';
 import { InfoCourseComponent } from './components/info-course/info-course.component';
-import { CourseInfoComponent } from './components/course-info/course-info.component';
 import { GradeComponent } from './components/grade/grade.component';
+import { StudentCoursesComponent } from './components/student-courses/student-courses.component';
+import { SearchTeacherComponent } from './components/search-teacher/search-teacher.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'courses', component: CoursesComponent },
-  { path: 'teachers', component: TeachersComponent },
   { path: 'signupTeacher', component: TeacherSignupComponent },
   { path: 'signupStudent', component: StudentSignupComponent },
   { path: 'signupParent', component: ParentSignupComponent },
@@ -31,6 +30,7 @@ export const routes: Routes = [
   { path: 'addCourse', component: AddCourseComponent },
   { path: 'editCourse/:id', component: EditCourseComponent },
   { path: 'infoCourse/:id', component: InfoCourseComponent },
-  { path: 'courseInfo', component: CourseInfoComponent },
+  { path: 'courseInfo', component: StudentCoursesComponent },
+  { path: 'searchTeacher', component: SearchTeacherComponent },
   { path: 'grade/:courseId/:studentId', component: GradeComponent },
 ];
