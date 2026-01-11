@@ -1,14 +1,17 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const teacherSchema = mongoose.Schema({
-  firstName: String,
-  lastName: String,
-  password: String,
-  isValidated: Boolean,
-  specialty: String,
-  role: String,
-  tel: Number,
+const teacherSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  speciality: String,
+  cv: String,
+  isValidated: {
+    type: Boolean,
+    default: false
+  }
 });
 
-const teacher = mongoose.model("teacher", teacherSchema);
-module.exports = teacher;
+module.exports = mongoose.model('Teacher', teacherSchema);

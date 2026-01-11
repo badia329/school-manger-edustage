@@ -16,12 +16,10 @@ export class CourseInfoComponent {
   constructor() {}
 
   ngOnInit() {
-    // 1. جلب البيانات من الـ LocalStorage
     this.courseAssignments = JSON.parse(localStorage.getItem('courseAssignments') || '[]');
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    this.grades = JSON.parse(localStorage.getItem('grades') || '[]'); // مهم جداً جلب الدرجات
+    this.grades = JSON.parse(localStorage.getItem('grades') || '[]'); 
 
-    // 2. استدعاء الدالة لملء مصفوفة myCourse
     this.loadData();
   }
 

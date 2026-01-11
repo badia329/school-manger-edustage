@@ -1,17 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  usersUrl = 'http://localhost:5206/users';
-  constructor(private httpClient: HttpClient) {}
+  URL = 'http://localhost:5206/api/auth';
 
-  signup(obj: any) {
-    return this.httpClient.post<{ msg: string, isAdded: boolean }>(this.usersUrl + '/signup', obj);
-  }
+  constructor(private http: HttpClient) {}
+
   login(obj: any) {
-    return this.httpClient.post(this.usersUrl + '/login', obj);
+    return this.http.post<{ token: string; role: string; msg: string }>(
+      this.URL + '/login',
+      obj
+    );
+  }
+  signupStudent(obj: any) {
+    return this.http.post<{ msg: string; isAdded: boolean }>(
+      this.URL + '/signup/student',
+      obj
+    );
   }
 }

@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../services/auth.service';
+import { StudentService } from '../../../services/student.service';
 
 @Component({
   selector: 'app-student-signup',
@@ -19,11 +19,12 @@ import { AuthService } from '../../../services/auth.service';
 export class StudentSignupComponent {
   studentForm: FormGroup;
   errorMessage: string = '';
+  success = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private studentService: StudentService
   ) {
     this.studentForm = this.formBuilder.group(
       {
@@ -34,7 +35,7 @@ export class StudentSignupComponent {
         address: ['', [Validators.required, Validators.minLength(10)]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        // image: ['', Validators.required], // Photo de profil
+        // image: ['', Validators.required],
       },
       {
         validators: this.passwordMatchValidator,
@@ -52,13 +53,30 @@ export class StudentSignupComponent {
   }
 
   signup() {
-    console.log('Here is user', this.studentForm.value);
-    this.authService.signup(this.studentForm.value).subscribe((data) => {
-      console.log('Here is response after signup', data);
+    if (this.studentForm.invalid) {
+      this.errorMessage = 'Please check the form';
+      return;
+    }
+
+    const studentData = {
+      firstName: this.studentForm.value.firstName,
+      lastName: this.studentForm.value.lastName,
+      email: this.studentForm.value.email,
+      tel: this.studentForm.value.tel,
+      address: this.studentForm.value.address,
+      password: this.studentForm.value.password,
+    };
+
+    console.log('Sending student data:', studentData);
+
+    this.studentService.signupStudent(studentData).subscribe((data) => {
+      console.log('Response from server:', data);
+
       if (data.isAdded) {
+        this.success = data.msg;
         this.router.navigate(['/login']);
       } else {
-        this.errorMessage = 'Email is Already Exists';
+        this.errorMessage = data.msg;
       }
     });
   }

@@ -7,7 +7,7 @@
     <div class="form-group mb-3">
       <label><b>Phone Number</b></label>
       <input
-        type="text"
+        type="number"
         formControlName="tel"
         class="form-control"
         placeholder="Enter Phone Number"
@@ -62,6 +62,6 @@
     <hr />
     <!-- ========== Submit Button ========== -->
     <button type="submit" class="registerbtn">Login Teacher</button>
-    <small class="text-danger">{{ errorMessage }}</small>
+    <small class="text-danger">{{ error }}</small>
   </div>
 </form>

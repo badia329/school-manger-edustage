@@ -5,7 +5,6 @@ import { TeachersComponent } from './components/teachers/teachers.component';
 import { TeacherSignupComponent } from './components/signup/teacher-signup/teacher-signup.component';
 import { StudentSignupComponent } from './components/signup/student-signup/student-signup.component';
 import { ParentSignupComponent } from './components/signup/parent-signup/parent-signup.component';
-import { LoginComponent } from './components/signup/login/login.component';
 import { ParentDashboardComponent } from './components/dashboard/parent-dashboard/parent-dashboard.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard/admin-dashboard.component';
 import { StudentDashboardComponent } from './components/dashboard/student-dashboard/student-dashboard.component';
@@ -16,6 +15,7 @@ import { InfoCourseComponent } from './components/info-course/info-course.compon
 import { CourseInfoComponent } from './components/course-info/course-info.component';
 import { GradeComponent } from './components/grade/grade.component';
 import { SearchTeacherComponent } from './components/search-teachers/search-teachers.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
