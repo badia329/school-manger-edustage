@@ -5,18 +5,18 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class TeacherService {
-  teacherURL: string = 'http://localhost:4306/teacher';
+  teacherURL: string = 'http://localhost:5206/teacher';
   constructor(private httpClient: HttpClient) {}
-  getAllteachers() {
+  getAllTeachers() {
     return this.httpClient.get(this.teacherURL);
   }
-  addteacher(obj: any) {
+  addTeacher(obj: any) {
     return this.httpClient.post(this.teacherURL, obj);
   }
-  deleteteacher(id: number) {
+  deleteTeacher(id: number) {
     return this.httpClient.delete(this.teacherURL + '/' + id);
   }
-  editteacher(newObj: any) {
+  editTeacher(newObj: any) {
     return this.httpClient.put(this.teacherURL, newObj);
   }
 }

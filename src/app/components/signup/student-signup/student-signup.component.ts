@@ -8,10 +8,10 @@ import {
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-student-signup',
-  standalone: true,
   imports: [ReactiveFormsModule, CommonModule, BannerComponent],
   templateUrl: './student-signup.component.html',
   styleUrl: './student-signup.component.css',
@@ -20,7 +20,11 @@ export class StudentSignupComponent {
   studentForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.studentForm = this.formBuilder.group(
       {
         firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -48,33 +52,14 @@ export class StudentSignupComponent {
   }
 
   signup() {
-    if (this.studentForm.valid) {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      let emailExists = false;
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].email === this.studentForm.value.email) {
-          emailExists = true;
-          break;
-        }
+    console.log('Here is user', this.studentForm.value);
+    this.authService.signup(this.studentForm.value).subscribe((data) => {
+      console.log('Here is response after signup', data);
+      if (data.isAdded) {
+        this.router.navigate(['/login']);
+      } else {
+        this.errorMessage = 'Email is Already Exists';
       }
-
-      if (emailExists) {
-        this.errorMessage = 'Email already exists.';
-        return;
-      }
-
-      const newStudent = {
-        ...this.studentForm.value,
-        id: String(Date.now()),
-        role: 'student',
-      };
-
-      users.push(newStudent);
-      localStorage.setItem('users', JSON.stringify(users));
-      console.log('Student registered successfully!', this.studentForm.value);
-      this.router.navigate(['/login']);
-    } else {
-      this.errorMessage = 'Please fill all required fields correctly.';
-    }
+    });
   }
 }

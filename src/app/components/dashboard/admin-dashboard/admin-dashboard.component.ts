@@ -3,6 +3,7 @@ import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CoursesService } from '../../../services/courses.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -19,7 +20,7 @@ export class AdminDashboardComponent {
   filteredCourses: any = [];
   selectedCourseId: any = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private coursesService: CoursesService) {}
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const usersTab = JSON.parse(localStorage.getItem('users') || '[]');
@@ -32,7 +33,10 @@ export class AdminDashboardComponent {
         this.students.push(usersTab[i]);
       }
     }
-    this.courses = JSON.parse(localStorage.getItem('courses') || '[]');
+    this.coursesService.getAllCourses().subscribe((data: any) => {
+      console.log('Here are all courses:', data);
+      this.courses = data.tab;
+    });
   }
   validateTeacher(id: number) {
     const usersTab = JSON.parse(localStorage.getItem('users') || '[]');

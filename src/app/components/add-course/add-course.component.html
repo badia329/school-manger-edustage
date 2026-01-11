@@ -1,18 +1,32 @@
 <app-banner title="Add Course"></app-banner>
 
-<form #courseForm="ngForm" (ngSubmit)="addCourse(courseForm)">
+<form #courseForm="ngForm" (ngSubmit)="addCourse()">
   <div class="container">
     <hr />
 
     <!-- Course Name -->
     <div class="form-group mb-3">
       <label><b>Course Name</b></label>
-      <input type="text" name="name" ngModel required minlength="3" class="form-control" placeholder="Enter Course Name" />
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="obj.name"
+        required
+        minlength="3"
+        class="form-control"
+        placeholder="Enter Course Name"
+      />
       <div *ngIf="courseForm.submitted || courseForm.controls['name']?.touched">
-        <small class="text-danger" *ngIf="courseForm.controls['name']?.errors?.['required']">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['name']?.errors?.['required']"
+        >
           Course name is required
         </small>
-        <small class="text-danger" *ngIf="courseForm.controls['name']?.errors?.['minlength']">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['name']?.errors?.['minlength']"
+        >
           Minimum 3 characters
         </small>
       </div>
@@ -21,12 +35,29 @@
     <!-- Description -->
     <div class="form-group mb-3">
       <label><b>Description</b></label>
-      <textarea name="description" ngModel required minlength="10" class="form-control" placeholder="Enter Course Description"></textarea>
-      <div *ngIf="courseForm.submitted || courseForm.controls['description']?.touched">
-        <small class="text-danger" *ngIf="courseForm.controls['description']?.errors?.['required']">
+      <textarea
+        name="description"
+        [(ngModel)]="obj.description"
+        required
+        minlength="10"
+        class="form-control"
+        placeholder="Enter Course Description"
+      ></textarea>
+      <div
+        *ngIf="
+          courseForm.submitted || courseForm.controls['description']?.touched
+        "
+      >
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['description']?.errors?.['required']"
+        >
           Description is required
         </small>
-        <small class="text-danger" *ngIf="courseForm.controls['description']?.errors?.['minlength']">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['description']?.errors?.['minlength']"
+        >
           Minimum 10 characters
         </small>
       </div>
@@ -35,12 +66,28 @@
     <!-- Duration -->
     <div class="form-group mb-3">
       <label><b>Duration (hours)</b></label>
-      <input type="number" name="duration" ngModel required min="1" class="form-control" placeholder="Enter Course Duration" />
-      <div *ngIf="courseForm.submitted || courseForm.controls['duration']?.touched">
-        <small class="text-danger" *ngIf="courseForm.controls['duration']?.errors?.['required']">
+      <input
+        type="number"
+        name="duration"
+        [(ngModel)]="obj.duration"
+        required
+        min="1"
+        class="form-control"
+        placeholder="Enter Course Duration"
+      />
+      <div
+        *ngIf="courseForm.submitted || courseForm.controls['duration']?.touched"
+      >
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['duration']?.errors?.['required']"
+        >
           Duration is required
         </small>
-        <small class="text-danger" *ngIf="courseForm.controls['duration']?.errors?.['min']">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['duration']?.errors?.['min']"
+        >
           Duration must be at least 1 hour
         </small>
       </div>
@@ -49,7 +96,7 @@
     <!-- Subject / Type -->
     <div class="form-group mb-3">
       <label><b>Subject</b></label>
-      <select name="type" ngModel required class="form-control">
+      <select name="type" [(ngModel)]="obj.type" required class="form-control">
         <option value="">-- Select Subject --</option>
         <option>Mathematics</option>
         <option>Physics</option>
@@ -64,7 +111,10 @@
         <option>Philosophy</option>
       </select>
       <div *ngIf="courseForm.submitted || courseForm.controls['type']?.touched">
-        <small class="text-danger" *ngIf="courseForm.controls['type']?.errors?.['required']">
+        <small
+          class="text-danger"
+          *ngIf="courseForm.controls['type']?.errors?.['required']"
+        >
           Subject is required
         </small>
       </div>

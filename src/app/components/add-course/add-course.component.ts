@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { BannerComponent } from '../banner/banner.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CoursesService } from '../../services/courses.service';
 
 @Component({
   selector: 'app-add-course',
@@ -10,32 +11,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-course.component.css',
 })
 export class AddCourseComponent {
-  addCourse(courseForm: any) {
-    if (courseForm.valid) {
-      const courses = JSON.parse(localStorage.getItem('courses') || '[]');
-      const currentUser = JSON.parse(
-        localStorage.getItem('currentUser') || '{}'
-      );
-
-      const newCourse = {
-        idCourse: String(Date.now()),
-        name: courseForm.value.name,
-        description: courseForm.value.description,
-        duration: courseForm.value.duration,
-        type: courseForm.value.type,
-        teacherId: currentUser.id,
-      };
-
-      courses.push(newCourse);
-
-      localStorage.setItem('courses', JSON.stringify(courses));
-
-      courseForm.resetForm();
-
-      console.log('Course added successfully!', newCourse);
-      alert('Course added successfully!');
-    } else {
-      alert('Please fill all required fields correctly.');
-    }
+  obj: any = [];
+  constructor(private coursesService: CoursesService) {}
+  addCourse() {
+    console.log('Here is Course Obj', this.obj);
+    this.coursesService.addCourse(this.obj).subscribe((response) => {
+      console.log('Here is response from BE after adding Course', response);
+    });
   }
 }
