@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
-import { StudentService } from '../../../services/student.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-student-signup',
@@ -19,12 +19,12 @@ import { StudentService } from '../../../services/student.service';
 export class StudentSignupComponent {
   studentForm: FormGroup;
   errorMessage: string = '';
-  success = '';
+  success: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private studentService: StudentService
+    private authService: AuthService
   ) {
     this.studentForm = this.formBuilder.group(
       {
@@ -69,7 +69,7 @@ export class StudentSignupComponent {
 
     console.log('Sending student data:', studentData);
 
-    this.studentService.signupStudent(studentData).subscribe((data) => {
+    this.authService.signupStudent(studentData).subscribe((data) => {
       console.log('Response from server:', data);
 
       if (data.isAdded) {

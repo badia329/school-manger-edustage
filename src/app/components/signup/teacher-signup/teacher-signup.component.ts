@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-teacher-signup',
@@ -21,7 +22,11 @@ export class TeacherSignupComponent {
   successMessage: string = '';
   errorMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.teacherForm = this.formBuilder.group(
       {
         firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -51,36 +56,33 @@ export class TeacherSignupComponent {
   }
 
   signup() {
-    if (this.teacherForm.valid) {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      let emailExists = false;
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].email === this.teacherForm.value.email) {
-          emailExists = true;
-          break;
-        }
-      }
-
-      if (emailExists) {
-        this.errorMessage = 'Email already exists. Please use another email.';
-        console.log(this.errorMessage);
-        return;
-      }
-
-      const newTeacher = {
-        ...this.teacherForm.value,
-        id: String(Date.now()),
-        role: 'teacher',
-        isValidated: false,
-      };
-
-      users.push(newTeacher);
-      localStorage.setItem('users', JSON.stringify(users));
-      console.log('Teacher registered successfully!', this.teacherForm.value);
-      this.router.navigate(['/login']);
-    } else {
-      this.errorMessage = 'Please fill all required fields correctly.';
-      console.log(this.errorMessage);
+    if (this.teacherForm.invalid) {
+      this.errorMessage = 'Please check the form and upload your CV';
+      return;
     }
+
+    const teacherData = {
+      firstName: this.teacherForm.value.firstName,
+      lastName: this.teacherForm.value.lastName,
+      email: this.teacherForm.value.email,
+      tel: this.teacherForm.value.tel,
+      address: this.teacherForm.value.address,
+      password: this.teacherForm.value.password,
+      specialty: this.teacherForm.value.specialty,
+      cv: this.teacherForm.value.cv,
+    };
+
+    console.log('Sending Teacher data:', teacherData);
+
+    this.authService.signupTeacher(teacherData).subscribe((data) => {
+      console.log('Response from server:', data);
+
+      if (data.isAdded) {
+        this.successMessage = data.msg;
+        this.router.navigate(['/login']);
+      } else {
+        this.errorMessage = data.msg;
+      }
+    });
   }
 }

@@ -6,7 +6,7 @@ const teacherSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  speciality: String,
+  specialty: String,
   cv: String,
   isValidated: {
     type: Boolean,

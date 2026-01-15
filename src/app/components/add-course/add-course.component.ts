@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BannerComponent } from '../banner/banner.component';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CoursesService } from '../../services/courses.service';
 
@@ -17,6 +17,8 @@ export class AddCourseComponent {
     console.log('Here is Course Obj', this.obj);
     this.coursesService.addCourse(this.obj).subscribe((response) => {
       console.log('Here is response from BE after adding Course', response);
+      alert(response.msg);
+      this.obj = {};
     });
   }
 }

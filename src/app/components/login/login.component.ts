@@ -31,40 +31,45 @@ export class LoginComponent {
     });
   }
 
-  login() {
-    if (this.loginForm.invalid) {
-      this.error = 'Champs obligatoires';
-      return;
-    }
+login() {
+  if (this.loginForm.invalid) {
+    this.error = 'Required fields';
+    return;
+  }
 
-    const data = {
-      tel: this.loginForm.value.tel,
-      password: this.loginForm.value.password,
-    };
+  const data = {
+    tel: this.loginForm.value.tel,
+    password: this.loginForm.value.password,
+  };
 
-    this.auth.login(data).subscribe({
-      next: (res) => {
+  this.auth.login(data).subscribe(
+    (res: any) => {
+      
+      if (res.isLogged) {
         localStorage.setItem('token', res.token);
         localStorage.setItem('role', res.role);
 
-        switch (res.role) {
-          case 'admin':
-            this.router.navigate(['/admin']);
-            break;
-          case 'teacher':
-            this.router.navigate(['/teacher']);
-            break;
-          case 'student':
-            this.router.navigate(['/student']);
-            break;
-          case 'parent':
-            this.router.navigate(['/home']);
-            break;
+        if (res.role == 'admin') {
+          this.router.navigate(['/dashboardAdmin']);
+        } else if (res.role == 'teacher') {
+          if (res.isValidation) {
+            this.router.navigate(['/dashboardTeacher']);
+          } else {
+            this.error = 'not validation ';
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+          }
+        } else if (res.role == 'student') {
+          this.router.navigate(['/dashboardStudent']);
+        } else if (res.role == 'parent') {
         }
-      },
-      error: (err) => {
-        this.error = err.error.msg;
-      },
-    });
-  }
+      } else {
+        this.error = res.msg; 
+      }
+    },
+    (err) => {
+      this.error = "Connection Error";
+    }
+  );
+}
 }

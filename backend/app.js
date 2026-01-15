@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
 
 const mongoose = require("mongoose");
 mongoose
@@ -17,24 +16,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const Teacher = require("./models/teacher");
-const Student = require("./models/student");
-//traitemnt logique des reqs
 
-// busines Logic: Add New Course
-app.post("/courses", (req, res) => {
-  console.log("Business Logic: Add New Course");
-  let courseObj = req.body;
-  courseObj.id = Date.now();
-  courses.push(courseObj);
-  res.json({ msg: "Added with success!" });
-});
 
-// busines Logic: Get All Courses
-app.get("/courses", (req, res) => {
-  console.log("Businnes Logic: Get All Courses");
-  res.json({ tab: courses, nbr: courses.length });
-});
+const courseRoutes = require("./routes/courses.routes");
+const authRoutes = require("./routes/auth.routes");
+
+
 
 // busines Logic: Get All Teachers
 app.get("/teacher", (req, res) => {
@@ -120,10 +107,9 @@ app.post("/teachers/searchTeacher", (req, res) => {
   }
 });
 
-
-// busines Logic: Sign up Student
-app.use('/student', require('./routes/student.routes'));
-
-
+// busines Logic: Auth Users
+app.use("/auth", authRoutes);       
+// busines Logic: Courses
+app.use("/courses", courseRoutes);   
 //export app
 module.exports = app;

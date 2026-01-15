@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const gradeSchema = mongoose.Schema({
+const assignmentSchema = mongoose.Schema({
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Student"
@@ -8,10 +8,8 @@ const gradeSchema = mongoose.Schema({
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course"
-  },
-  note: Number,
-  evaluation: String
+  }
 });
 
-const Grade = mongoose.model("Grade", gradeSchema);
-module.exports = Grade;
+const Assignment = mongoose.model("Assignment", assignmentSchema);
+module.exports = Assignment;

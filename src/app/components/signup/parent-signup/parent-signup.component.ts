@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { BannerComponent } from '../../banner/banner.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-parent-signup',
@@ -19,8 +20,13 @@ import { CommonModule } from '@angular/common';
 export class ParentSignupComponent {
   parentForm: FormGroup;
   errorMessage: string = '';
+  successMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.parentForm = this.formBuilder.group(
       {
         firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -45,50 +51,33 @@ export class ParentSignupComponent {
   }
 
   signup() {
-    if (this.parentForm.valid) {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-      let childExists = false;
-      for (let i = 0; i < users.length; i++) {
-        if (
-          users[i].role === 'student' &&
-          users[i].tel === this.parentForm.value.childTel
-        ) {
-          childExists = true;
-          break;
-        }
-      }
-
-      if (!childExists) {
-        this.errorMessage =
-          "Child's phone number not found in our student list.";
-        return;
-      }
-
-      let emailExists = false;
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].email === this.parentForm.value.email) {
-          emailExists = true;
-          break;
-        }
-      }
-
-      if (emailExists) {
-        this.errorMessage = 'Email already exists.';
-        return;
-      }
-
-      const newParent = {
-        ...this.parentForm.value,
-        id: String(Date.now()),
-        role: 'parent',
-      };
-
-      users.push(newParent);
-      localStorage.setItem('users', JSON.stringify(users));
-      this.router.navigate(['/login']);
-    } else {
-      this.errorMessage = 'Please fill all required fields correctly.';
+    if (this.parentForm.invalid) {
+      this.errorMessage =
+        'Please check the form and provide your child phone number';
+      return;
     }
+
+    const parentData = {
+      firstName: this.parentForm.value.firstName,
+      lastName: this.parentForm.value.lastName,
+      email: this.parentForm.value.email,
+      tel: this.parentForm.value.tel,
+      address: this.parentForm.value.address,
+      password: this.parentForm.value.password,
+      childPhone: this.parentForm.value.childTel,
+    };
+
+    console.log('Sending Parent data:', parentData);
+
+    this.authService.signupParent(parentData).subscribe((data) => {
+      console.log('Response from server:', data);
+
+      if (data.isAdded) {
+        this.successMessage = data.msg;
+        this.router.navigate(['/login']);
+      } else {
+        this.errorMessage = data.msg;
+      }
+    });
   }
 }

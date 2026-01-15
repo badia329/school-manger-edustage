@@ -19,4 +19,10 @@ export class TeacherService {
   editTeacher(newObj: any) {
     return this.httpClient.put(this.teacherURL, newObj);
   }
+  signupTeacher(obj: any) {
+    return this.httpClient.post<{ msg: string; isAdded: boolean }>(
+      this.teacherURL + '/signup',
+      obj
+    );
+  }
 }
