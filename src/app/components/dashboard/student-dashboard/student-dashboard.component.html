@@ -1,1 +1,118 @@
-<p>student-dashboard works!</p>
+<!-- Student Dashboard Template -->
+<app-banner [title]="'Mon Espace Étudiant'"></app-banner>
+
+<div class="dashboard-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fa fa-book"></i> Mes Cours Assignés</h4>
+          </div>
+          <div class="card-body">
+            <!-- Loading -->
+            <div *ngIf="loading" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Chargement...</span>
+              </div>
+              <p class="mt-2">Chargement de vos cours...</p>
+            </div>
+
+            <!-- No courses message -->
+            <div *ngIf="!loading && myCourses.length === 0" class="alert alert-info">
+              <i class="fa fa-info-circle"></i>
+              Vous n'êtes assigné à aucun cours pour le moment.
+              Veuillez contacter l'administrateur.
+            </div>
+
+            <!-- Courses table -->
+            <div *ngIf="!loading && myCourses.length > 0" class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Nom du Cours</th>
+                    <th>Professeur</th>
+                    <th>Note</th>
+                    <th>Évaluation</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let assignment of myCourses; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <strong>{{ assignment.courseId?.name || 'Cours non disponible' }}</strong>
+                      <br>
+                      <small class="text-muted">{{ assignment.courseId?.description }}</small>
+                    </td>
+                    <td>
+                      <span *ngIf="assignment.teacherId">
+                        {{ assignment.teacherId.firstName }} {{ assignment.teacherId.lastName }}
+                      </span>
+                      <span *ngIf="!assignment.teacherId" class="text-muted">
+                        En attente d'affectation
+                      </span>
+                    </td>
+                    <td>
+                      <span *ngIf="courseGrades[assignment.courseId?._id]?.grade" 
+                            class="badge badge-success">
+                        {{ courseGrades[assignment.courseId?._id]?.grade }}/20
+                      </span>
+                      <span *ngIf="!courseGrades[assignment.courseId?._id]?.grade" 
+                            class="badge badge-warning">
+                        En attente
+                      </span>
+                    </td>
+                    <td>
+                      <span *ngIf="courseGrades[assignment.courseId?._id]?.evaluation" 
+                            class="badge badge-info">
+                        {{ courseGrades[assignment.courseId?._id]?.evaluation }}
+                      </span>
+                      <span *ngIf="!courseGrades[assignment.courseId?._id]?.evaluation" 
+                            class="text-muted">
+                        -
+                      </span>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-primary" 
+                              (click)="viewCourse(assignment)">
+                        <i class="fa fa-eye"></i> Détails
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User info card -->
+    <div class="row mt-4" *ngIf="currentUser">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header bg-secondary text-white">
+            <h4 class="mb-0"><i class="fa fa-user"></i> Mes Informations</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Nom:</strong> {{ currentUser.firstName }} {{ currentUser.lastName }}</p>
+                <p><strong>Email:</strong> {{ currentUser.email }}</p>
+              </div>
+              <div class="col-md-6 text-md-right">
+                <p><strong>Rôle:</strong> Étudiant</p>
+                <button class="btn btn-danger" (click)="logout()">
+                  <i class="fa fa-sign-out"></i> Déconnexion
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

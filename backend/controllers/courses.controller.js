@@ -23,3 +23,33 @@ exports.getCourseByIdTeacher = (req, res) => {
     res.json({ tab: courses, nbr: courses.length });
   });
 };
+
+// Business Logic: Get Course By Id
+exports.getCourseById = (req, res) => {
+  Course.findById(req.params.id).then((course) => {
+    if (!course) {
+      return res.status(404).json({ msg: "Course not found" });
+    }
+    res.json({ tab: course });
+  });
+};
+
+// Business Logic: Update Course
+exports.updateCourse = (req, res) => {
+  Course.findByIdAndUpdate(req.params.id, req.body, { new: true }).then((course) => {
+    if (!course) {
+      return res.status(404).json({ msg: "Course not found" });
+    }
+    res.json({ msg: "Course updated successfully", tab: course });
+  });
+};
+
+// Business Logic: Delete Course
+exports.deleteCourse = (req, res) => {
+  Course.findByIdAndDelete(req.params.id).then((course) => {
+    if (!course) {
+      return res.status(404).json({ msg: "Course not found" });
+    }
+    res.json({ msg: "Course deleted successfully", tab: course });
+  });
+};

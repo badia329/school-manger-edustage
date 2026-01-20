@@ -20,6 +20,7 @@ export class StudentSignupComponent {
   studentForm: FormGroup;
   errorMessage: string = '';
   success: string = '';
+  selectedImage: File | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,12 +36,21 @@ export class StudentSignupComponent {
         address: ['', [Validators.required, Validators.minLength(10)]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        // image: ['', Validators.required],
+        image: ['', Validators.required],
       },
       {
         validators: this.passwordMatchValidator,
       }
     );
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file;
+      // Store the actual file object, not just the filename
+      this.studentForm.patchValue({ image: file });
+    }
   }
 
   passwordMatchValidator(control: any) {
@@ -58,18 +68,20 @@ export class StudentSignupComponent {
       return;
     }
 
-    const studentData = {
-      firstName: this.studentForm.value.firstName,
-      lastName: this.studentForm.value.lastName,
-      email: this.studentForm.value.email,
-      tel: this.studentForm.value.tel,
-      address: this.studentForm.value.address,
-      password: this.studentForm.value.password,
-    };
+    const formData = new FormData();
+    formData.append('firstName', this.studentForm.value.firstName);
+    formData.append('lastName', this.studentForm.value.lastName);
+    formData.append('email', this.studentForm.value.email);
+    formData.append('tel', this.studentForm.value.tel);
+    formData.append('address', this.studentForm.value.address);
+    formData.append('password', this.studentForm.value.password);
 
-    console.log('Sending student data:', studentData);
+    const imageFile = this.studentForm.get('image')?.value;
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
 
-    this.authService.signupStudent(studentData).subscribe((data) => {
+    this.authService.signupStudent(formData).subscribe((data) => {
       console.log('Response from server:', data);
 
       if (data.isAdded) {

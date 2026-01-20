@@ -1,231 +1,203 @@
-<app-banner title="Register Parent"></app-banner>
-
-<form [formGroup]="parentForm" (ngSubmit)="signup()">
-  <div class="container">
-    <p>Please fill in this form to create a parent account.</p>
-    <hr />
-
-    <div class="form-group mb-3">
-      <label><b>First Name</b></label>
-      <input
-        type="text"
-        formControlName="firstName"
-        class="form-control"
-        placeholder="Enter First Name"
-      />
-      <div
-        *ngIf="
-          parentForm.controls['firstName'].invalid &&
-          (parentForm.controls['firstName'].touched ||
-            parentForm.controls['firstName'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['firstName'].errors?.['required']"
-          >First Name is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['firstName'].errors?.['minlength']"
-          >Min 3 characters required</small
-        >
-      </div>
+<div class="signup-page">
+  <div class="signup-card">
+    <div class="signup-header">
+      <h1>👨‍👩‍👧 Parent Registration</h1>
+      <p>Create your account to stay connected with your child's education</p>
     </div>
 
-    <div class="form-group mb-3">
-      <label><b>Last Name</b></label>
-      <input
-        type="text"
-        formControlName="lastName"
-        class="form-control"
-        placeholder="Enter Last Name"
-      />
-      <div
-        *ngIf="
-          parentForm.controls['lastName'].invalid &&
-          (parentForm.controls['lastName'].touched ||
-            parentForm.controls['lastName'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['lastName'].errors?.['required']"
-          >Last Name is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['lastName'].errors?.['minlength']"
-          >Min 3 characters required</small
-        >
-      </div>
-    </div>
+    <div class="signup-body">
+      <form [formGroup]="parentForm" (ngSubmit)="signup()">
+        <!-- Personal Information Section -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="form-control"
+              placeholder="Enter first name"
+            />
+            <small
+              class="text-danger"
+              *ngIf="parentForm.controls['firstName'].invalid &&
+                     (parentForm.controls['firstName'].touched ||
+                      parentForm.controls['firstName'].dirty)"
+            >
+              <span *ngIf="parentForm.controls['firstName'].errors?.['required']">First name is required</span>
+              <span *ngIf="parentForm.controls['firstName'].errors?.['minlength']">Minimum 3 characters</span>
+            </small>
+          </div>
 
-    <div class="form-group mb-3">
-      <label><b>Email Address</b></label>
-      <input
-        type="text"
-        formControlName="email"
-        class="form-control"
-        placeholder="Enter Email"
-      />
-      <div
-        *ngIf="
-          parentForm.controls['email'].invalid &&
-          (parentForm.controls['email'].touched ||
-            parentForm.controls['email'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['email'].errors?.['required']"
-          >Email is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['email'].errors?.['email']"
-          >Invalid email format</small
-        >
-      </div>
-    </div>
+          <div class="form-group">
+            <label>Last Name <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="lastName"
+              class="form-control"
+              placeholder="Enter last name"
+            />
+            <small
+              class="text-danger"
+              *ngIf="parentForm.controls['lastName'].invalid &&
+                     (parentForm.controls['lastName'].touched ||
+                      parentForm.controls['lastName'].dirty)"
+            >
+              <span *ngIf="parentForm.controls['lastName'].errors?.['required']">Last name is required</span>
+              <span *ngIf="parentForm.controls['lastName'].errors?.['minlength']">Minimum 3 characters</span>
+            </small>
+          </div>
+        </div>
 
-    <div class="form-group mb-3">
-      <label><b>Phone Number</b></label>
-      <input
-        type="text"
-        formControlName="tel"
-        class="form-control"
-        placeholder="Enter Your Phone"
-      />
-      <div
-        *ngIf="
-          parentForm.controls['tel'].invalid &&
-          (parentForm.controls['tel'].touched ||
-            parentForm.controls['tel'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['tel'].errors?.['required']"
-          >Phone is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['tel'].errors?.['pattern']"
-          >Phone must be 8 digits</small
-        >
-      </div>
-    </div>
+        <!-- Contact Information Section -->
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter email address"
+          />
+          <small
+            class="text-danger"
+            *ngIf="parentForm.controls['email'].invalid &&
+                   (parentForm.controls['email'].touched ||
+                    parentForm.controls['email'].dirty)"
+          >
+            <span *ngIf="parentForm.controls['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="parentForm.controls['email'].errors?.['email']">Invalid email format</span>
+          </small>
+        </div>
 
-    <div class="form-group mb-3">
-      <label><b>Child's Phone Number</b></label>
-      <input
-        type="text"
-        formControlName="childTel"
-        class="form-control"
-        placeholder="Enter Student's Phone"
-      />
-      <div
-        *ngIf="
-          parentForm.controls['childTel'].invalid &&
-          (parentForm.controls['childTel'].touched ||
-            parentForm.controls['childTel'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['childTel'].errors?.['required']"
-          >Child's phone is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['childTel'].errors?.['pattern']"
-          >Must be 8 digits</small
-        >
-      </div>
-      <small class="text-info d-block"
-        >We need this to link your account with your child's data.</small
-      >
-    </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="tel"
+              class="form-control"
+              placeholder="8-digit phone number"
+            />
+            <small
+              class="text-danger"
+              *ngIf="parentForm.controls['tel'].invalid &&
+                     (parentForm.controls['tel'].touched ||
+                      parentForm.controls['tel'].dirty)"
+            >
+              <span *ngIf="parentForm.controls['tel'].errors?.['required']">Phone is required</span>
+              <span *ngIf="parentForm.controls['tel'].errors?.['pattern']">Must be 8 digits</span>
+            </small>
+          </div>
 
-    <div class="form-group mb-3">
-      <label><b>Home Address</b></label>
-      <textarea
-        formControlName="address"
-        class="form-control"
-        placeholder="Enter Full Address"
-      ></textarea>
-      <div
-        *ngIf="
-          parentForm.controls['address'].invalid &&
-          (parentForm.controls['address'].touched ||
-            parentForm.controls['address'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['address'].errors?.['required']"
-          >Address is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['address'].errors?.['minlength']"
-          >Min 10 characters required</small
-        >
-      </div>
-    </div>
+          <div class="form-group">
+            <label>Child's Phone <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="childTel"
+              class="form-control"
+              placeholder="Student's phone"
+            />
+            <small
+              class="text-info d-block"
+              style="font-size: 12px; color: #667eea; margin-top: 5px;"
+            >
+              Required to link with your child's account
+            </small>
+            <small
+              class="text-danger"
+              *ngIf="parentForm.controls['childTel'].invalid &&
+                     (parentForm.controls['childTel'].touched ||
+                      parentForm.controls['childTel'].dirty)"
+            >
+              <span *ngIf="parentForm.controls['childTel'].errors?.['required']">Child's phone is required</span>
+              <span *ngIf="parentForm.controls['childTel'].errors?.['pattern']">Must be 8 digits</span>
+            </small>
+          </div>
+        </div>
 
-    <div class="form-group mb-3">
-      <label><b>Password</b></label>
-      <input
-        type="password"
-        formControlName="password"
-        class="form-control"
-        placeholder="Enter Password"
-      />
-      <div
-        *ngIf="
-          parentForm.controls['password'].invalid &&
-          parentForm.controls['password'].touched
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['password'].errors?.['required']"
-          >Password is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['password'].errors?.['minlength']"
-          >Min 6 characters</small
-        >
-      </div>
-    </div>
+        <!-- Address Section -->
+        <div class="form-group">
+          <label>Home Address <span class="required">*</span></label>
+          <input
+            type="text"
+            formControlName="address"
+            class="form-control"
+            placeholder="Enter full address"
+          />
+          <small
+            class="text-danger"
+            *ngIf="parentForm.controls['address'].invalid &&
+                   (parentForm.controls['address'].touched ||
+                    parentForm.controls['address'].dirty)"
+          >
+            <span *ngIf="parentForm.controls['address'].errors?.['required']">Address is required</span>
+            <span *ngIf="parentForm.controls['address'].errors?.['minlength']">Minimum 10 characters</span>
+          </small>
+        </div>
 
-    <div class="form-group mb-3">
-      <label><b>Repeat Password</b></label>
-      <input
-        type="password"
-        formControlName="confirmPassword"
-        class="form-control"
-        placeholder="Repeat Password"
-      />
-      <div *ngIf="parentForm.controls['confirmPassword'].touched">
-        <small
-          class="text-danger"
-          *ngIf="parentForm.controls['confirmPassword'].errors?.['required']"
-          >Confirm password is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="parentForm.errors?.['passwordMismatch']"
-          >Passwords do not match</small
-        >
-      </div>
-    </div>
+        <!-- Password Section -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Password <span class="required">*</span></label>
+            <input
+              type="password"
+              formControlName="password"
+              class="form-control"
+              placeholder="Create password"
+            />
+            <small
+              class="text-danger"
+              *ngIf="parentForm.controls['password'].invalid &&
+                     parentForm.controls['password'].touched"
+            >
+              <span *ngIf="parentForm.controls['password'].errors?.['required']">Password is required</span>
+              <span *ngIf="parentForm.controls['password'].errors?.['minlength']">Minimum 6 characters</span>
+            </small>
+          </div>
 
-    <hr />
-    <button type="submit" class="registerbtn">Register Parent</button>
-    <small class="text-danger d-block mt-2">{{ errorMessage }}</small>
+          <div class="form-group">
+            <label>Confirm Password <span class="required">*</span></label>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              class="form-control"
+              placeholder="Confirm password"
+            />
+            <small
+              class="text-danger"
+              *ngIf="parentForm.controls['confirmPassword'].errors?.['required'] &&
+                     parentForm.controls['confirmPassword'].touched"
+            >
+              Confirm password is required
+            </small>
+            <div
+              class="password-match"
+              [class.match]="parentForm.get('confirmPassword')?.value &&
+                             !parentForm.errors?.['passwordMismatch']"
+              [class.mismatch]="parentForm.get('confirmPassword')?.value &&
+                                parentForm.errors?.['passwordMismatch']"
+              *ngIf="parentForm.get('confirmPassword')?.touched"
+            >
+              <span *ngIf="!parentForm.errors?.['passwordMismatch']">✓ Passwords match</span>
+              <span *ngIf="parentForm.errors?.['passwordMismatch']">✗ Passwords do not match</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-message">
+          ⚠️ {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="parentForm.invalid"
+        >
+          Create Parent Account
+        </button>
+      </form>
+    </div>
   </div>
-</form>
+</div>
+

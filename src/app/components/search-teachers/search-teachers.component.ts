@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BannerComponent } from '../banner/banner.component';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-search-teachers',
@@ -11,34 +12,51 @@ import { BannerComponent } from '../banner/banner.component';
 })
 
 export class SearchTeacherComponent {
-  users: any = [];
+  allTeachers: any = [];
   filteredTeachers: any = [];
   isSearched: boolean = false;
+  loading: boolean = false;
+  error: string = '';
 
-  constructor() {}
+  constructor(private httpClient: HttpClient) {}
 
   ngOnInit() {
-    this.users = JSON.parse(localStorage.getItem('users') || '[]');
+    this.loadAllTeachers();
+  }
+
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    });
+  }
+
+  loadAllTeachers() {
+    this.loading = true;
+    this.httpClient.get<{ tab: any; nbr: number }>(
+      'http://localhost:5206/teachers',
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (data) => {
+        this.allTeachers = data.tab || [];
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error loading teachers:', err);
+        this.error = 'Failed to load teachers';
+        this.loading = false;
+      }
+    });
   }
 
   search(f: NgForm) {
-    const teachers = [];
-
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].role === "teacher") {
-        teachers.push(this.users[i]);
-      }
-    }
-
     this.isSearched = true;
     const specialtyToSearch = f.value.specialty?.toLowerCase() || '';
-    this.filteredTeachers = [];
 
-    for (let i = 0; i < teachers.length; i++) {
-      const teacher = teachers[i];
-      if (teacher.specialty?.toLowerCase().includes(specialtyToSearch)) {
-        this.filteredTeachers.push(teacher);
-      }
-    }
+    this.filteredTeachers = this.allTeachers.filter((teacher: any) => {
+      const specialty = teacher.speciality || teacher.specialty || '';
+      return specialty.toLowerCase().includes(specialtyToSearch);
+    });
   }
 }

@@ -26,19 +26,55 @@
               Specialty is required to search.
             </div>
           </form>
+
+          <!-- Loading -->
+          <div *ngIf="loading" class="text-center py-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="error" class="alert alert-danger">
+            {{ error }}
+          </div>
         </div>
       </div>
 
       <div class="mt-4" *ngIf="filteredTeachers.length > 0">
-        <h4>Results:</h4>
-        <ul class="list-group">
-          <li *ngFor="let t of filteredTeachers" class="list-group-item">
-            {{ t.firstName }} {{ t.lastName }} - <strong>{{ t.specialty }}</strong>
-          </li>
-        </ul>
+        <h4>Results ({{ filteredTeachers.length }} teachers found):</h4>
+        <div class="row">
+          <div class="col-md-6 mb-3" *ngFor="let teacher of filteredTeachers">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-chalkboard-teacher"></i>
+                  {{ teacher.userId?.firstName }} {{ teacher.userId?.lastName }}
+                </h5>
+                <p class="card-text">
+                  <strong>Specialty:</strong> 
+                  <span class="badge bg-info">{{ teacher.speciality || teacher.specialty }}</span>
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <i class="fas fa-envelope"></i> {{ teacher.userId?.email }}
+                  </small>
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <i class="fas fa-phone"></i> {{ teacher.userId?.tel }}
+                  </small>
+                </p>
+                <span [class]="teacher.isValidated ? 'badge bg-success' : 'badge bg-warning'">
+                  {{ teacher.isValidated ? 'Validated' : 'Pending Validation' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
-      <div class="alert alert-warning mt-3" *ngIf="isSearched && filteredTeachers.length === 0">
+      <div class="alert alert-warning mt-3" *ngIf="isSearched && filteredTeachers.length === 0 && !loading">
         No teachers found for this specialty.
       </div>
     </div>

@@ -4,11 +4,19 @@ const User = require("../models/user");
 const Student = require("../models/student");
 const Teacher = require("../models/teacher");
 const Parent = require("../models/parent");
+const { SECRET_KEY } = require("../middleware/auth.middleware");
 
 // busines Logic: Sign up Student
 exports.signupStudent = (req, res) => {
   console.log("Business Logic: Student Signup", req.body);
   let user = req.body;
+  let photoPath = null;
+
+  // Check if file was uploaded
+  if (req.file) {
+    photoPath = '/uploads/images/' + req.file.filename;
+    console.log('Image uploaded:', photoPath);
+  }
 
   User.findOne({ email: user.email }).then((data) => {
     if (data) {
@@ -29,6 +37,7 @@ exports.signupStudent = (req, res) => {
           let studentObj = new Student({
             userId: savedUser._id,
             address: user.address,
+            photo: photoPath,
           });
           studentObj.save();
           res.json({ msg: "Student added successfully!", isAdded: true });
@@ -149,7 +158,7 @@ exports.login = (req, res) => {
 
           const token = jwt.sign(
             { userId: user._id, role: user.role },
-            "MY_SECRET_KEY_2024",
+            SECRET_KEY,
             { expiresIn: "24h" }
           );
 
@@ -165,7 +174,7 @@ exports.login = (req, res) => {
       } else {
         const token = jwt.sign(
           { userId: user._id, role: user.role },
-          "MY_SECRET_KEY_2024",
+          SECRET_KEY,
           { expiresIn: "24h" }
         );
 

@@ -37,3 +37,72 @@ exports.signupTeacher = (req, res) => {
     }
   });
 };
+
+// Business Logic: Get All Teachers
+exports.getAllTeachers = (req, res) => {
+  Teacher.find()
+    .populate("userId", "firstName lastName email tel")
+    .then((teachers) => {
+      res.json({ tab: teachers, nbr: teachers.length });
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: "Error fetching teachers", error: err });
+    });
+};
+
+// Business Logic: Get Teacher By Id
+exports.getTeacherById = (req, res) => {
+  Teacher.findById(req.params.id)
+    .populate("userId", "firstName lastName email tel")
+    .then((teacher) => {
+      if (!teacher) {
+        return res.status(404).json({ msg: "Teacher not found" });
+      }
+      res.json({ tab: teacher });
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: "Error fetching teacher", error: err });
+    });
+};
+
+// Business Logic: Update Teacher
+exports.updateTeacher = (req, res) => {
+  Teacher.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .populate("userId", "firstName lastName email tel")
+    .then((teacher) => {
+      if (!teacher) {
+        return res.status(404).json({ msg: "Teacher not found" });
+      }
+      res.json({ msg: "Teacher updated successfully", tab: teacher });
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: "Error updating teacher", error: err });
+    });
+};
+
+// Business Logic: Delete Teacher
+exports.deleteTeacher = (req, res) => {
+  Teacher.findById(req.params.id)
+    .then((teacher) => {
+      if (!teacher) {
+        return res.status(404).json({ msg: "Teacher not found" });
+      }
+      // Delete associated user
+      User.findByIdAndDelete(teacher.userId)
+        .then(() => {
+          Teacher.findByIdAndDelete(req.params.id)
+            .then(() => {
+              res.json({ msg: "Teacher deleted successfully" });
+            })
+            .catch((err) => {
+              res.status(500).json({ msg: "Error deleting teacher", error: err });
+            });
+        })
+        .catch((err) => {
+          res.status(500).json({ msg: "Error deleting user", error: err });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({ msg: "Error fetching teacher", error: err });
+    });
+};

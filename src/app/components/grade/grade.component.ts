@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-grade',
@@ -19,8 +20,13 @@ export class GradeComponent {
   evaluation: string = '';
 
   existingGrade: any = null;
+  loading: boolean = true;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private httpClient: HttpClient
+  ) {}
 
   ngOnInit() {
     this.courseId = this.route.snapshot.paramMap.get('courseId');
@@ -28,33 +34,69 @@ export class GradeComponent {
     this.loadData();
   }
 
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    });
+  }
+
   loadData() {
-    const courses = JSON.parse(localStorage.getItem('courses') || '[]');
-    const students = JSON.parse(localStorage.getItem('users') || '[]');
-    const grades = JSON.parse(localStorage.getItem('grades') || '[]');
+    this.loading = true;
 
-    for (let i = 0; i < courses.length; i++) {
-      if (courses[i].idCourse == this.courseId) {
-        this.course = courses[i];
-        break;
+    // Load course
+    this.httpClient.get<{ tab: any }>(
+      `http://localhost:5206/courses/${this.courseId}`,
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (data) => {
+        this.course = data.tab;
+        this.loadStudent();
+      },
+      error: (err: any) => {
+        console.error('Error loading course:', err);
+        this.loading = false;
       }
-    }
+    });
+  }
 
-    for (let i = 0; i < students.length; i++) {
-      if (students[i].id == this.studentId) {
-        this.student = students[i];
-        break;
+  loadStudent() {
+    // Load student by user ID
+    this.httpClient.get<{ tab: any }>(
+      `http://localhost:5206/students/user/${this.studentId}`,
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (data) => {
+        this.student = data.tab;
+        this.loadExistingGrade();
+      },
+      error: (err: any) => {
+        console.error('Error loading student:', err);
+        this.loading = false;
       }
-    }
+    });
+  }
 
-    for (let i = 0; i < grades.length; i++) {
-      if (grades[i].courseId == this.courseId && grades[i].studentId == this.studentId) {
-        this.existingGrade = grades[i];
-        this.grade = grades[i].grade;
-        this.evaluation = grades[i].evaluation;
-        break;
+  loadExistingGrade() {
+    // Check if grade already exists using grades endpoint
+    this.httpClient.get<any>(
+      `http://localhost:5206/grades/${this.studentId}/${this.courseId}`,
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: (data) => {
+        if (data.grade) {
+          this.existingGrade = data.grade;
+          this.grade = data.grade.grade;
+          this.evaluation = data.grade.evaluation;
+        }
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.log('No existing grade found');
+        this.loading = false;
       }
-    }
+    });
   }
 
   saveGrade() {
@@ -63,48 +105,57 @@ export class GradeComponent {
       return;
     }
 
-    let empty = true;
-    for (let i = 0; i < this.evaluation.length; i++) {
-      if (this.evaluation[i] !== ' ') {
-        empty = false;
-        break;
-      }
-    }
-
-    if (empty) {
+    if (!this.evaluation || this.evaluation.trim() === '') {
       alert('Veuillez ajouter une évaluation!');
       return;
     }
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const grades = JSON.parse(localStorage.getItem('grades') || '[]');
-
+    
     const gradeData = {
-      id: this.existingGrade ? this.existingGrade.id : Date.now(),
-      courseId: this.courseId,
       studentId: this.studentId,
-      teacherId: currentUser.id,
+      courseId: this.courseId,
+      teacherId: currentUser.userId || currentUser.id,
       grade: this.grade,
       evaluation: this.evaluation,
       date: new Date().toISOString()
     };
 
-    let updated = false;
-    for (let i = 0; i < grades.length; i++) {
-      if (this.existingGrade && grades[i].id === this.existingGrade.id) {
-        grades[i] = gradeData;
-        updated = true;
-        break;
-      }
+    if (this.existingGrade) {
+      // Update existing grade
+      this.httpClient.put<any>(
+        `http://localhost:5206/grades/${this.existingGrade._id}`,
+        gradeData,
+        { headers: this.getAuthHeaders() }
+      ).subscribe({
+        next: (data: any) => {
+          console.log('Grade updated:', data);
+          alert('Grade updated successfully!');
+          this.router.navigate(['/dashboardTeacher']);
+        },
+        error: (err: any) => {
+          console.error('Error updating grade:', err);
+          alert('Error updating grade');
+        }
+      });
+    } else {
+      // Add new grade
+      this.httpClient.post<any>(
+        `http://localhost:5206/grades`,
+        gradeData,
+        { headers: this.getAuthHeaders() }
+      ).subscribe({
+        next: (data: any) => {
+          console.log('Grade added:', data);
+          alert('Grade and evaluation recorded successfully!');
+          this.router.navigate(['/dashboardTeacher']);
+        },
+        error: (err: any) => {
+          console.error('Error adding grade:', err);
+          alert('Error recording grade');
+        }
+      });
     }
-
-    if (!updated) {
-      grades.push(gradeData);
-    }
-
-    localStorage.setItem('grades', JSON.stringify(grades));
-    alert('Rating and review successfully recorded!');
-    this.router.navigate(['dashboardTeacher']);
   }
 
   goBack() {

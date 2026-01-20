@@ -1,266 +1,218 @@
-<app-banner title="Register Teacher"></app-banner>
-
-<form [formGroup]="teacherForm" (ngSubmit)="signup()">
-  <div class="container">
-    <p>Please fill in this form to create an account.</p>
-    <hr />
-
-    <!-- ========== First Name Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>First Name</b></label>
-      <input
-        type="text"
-        formControlName="firstName"
-        class="form-control"
-        placeholder="Enter First Name"
-      />
-      <div
-        *ngIf="
-          teacherForm.controls['firstName'].invalid &&
-          (teacherForm.controls['firstName'].touched ||
-            teacherForm.controls['firstName'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['firstName'].errors?.['required']"
-          >First Name is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['firstName'].errors?.['minlength']"
-          >Min 3 characters required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['firstName'].errors?.['pattern']"
-          >Only letters allowed</small
-        >
-      </div>
+<div class="signup-page">
+  <div class="signup-card">
+    <div class="signup-header">
+      <h1>👨‍🏫 Teacher Registration</h1>
+      <p>Join our teaching team and inspire students</p>
     </div>
 
-    <!-- ========== Last Name Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Last Name</b></label>
-      <input
-        type="text"
-        formControlName="lastName"
-        class="form-control"
-        placeholder="Enter Last Name"
-      />
-      <div
-        *ngIf="
-          teacherForm.controls['lastName'].invalid &&
-          (teacherForm.controls['lastName'].touched ||
-            teacherForm.controls['lastName'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['lastName'].errors?.['required']"
-          >Last Name is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['lastName'].errors?.['minlength']"
-          >Min 3 characters required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['lastName'].errors?.['pattern']"
-          >Only letters allowed</small
-        >
-      </div>
-    </div>
+    <div class="signup-body">
+      <form [formGroup]="teacherForm" (ngSubmit)="signup()">
+        <!-- Personal Information Section -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="form-control"
+              placeholder="Enter first name"
+            />
+            <small
+              class="text-danger"
+              *ngIf="teacherForm.controls['firstName'].invalid &&
+                     (teacherForm.controls['firstName'].touched ||
+                      teacherForm.controls['firstName'].dirty)"
+            >
+              <span *ngIf="teacherForm.controls['firstName'].errors?.['required']">First name is required</span>
+              <span *ngIf="teacherForm.controls['firstName'].errors?.['minlength']">Minimum 3 characters</span>
+            </small>
+          </div>
 
-    <!-- ========== Email Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Email Address</b></label>
-      <input
-        type="text"
-        formControlName="email"
-        class="form-control"
-        placeholder="Enter Email"
-      />
-      <div
-        *ngIf="
-          teacherForm.controls['email'].invalid &&
-          (teacherForm.controls['email'].touched ||
-            teacherForm.controls['email'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['email'].errors?.['required']"
-          >Email is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['email'].errors?.['email']"
-          >Invalid email format</small
-        >
-      </div>
-    </div>
+          <div class="form-group">
+            <label>Last Name <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="lastName"
+              class="form-control"
+              placeholder="Enter last name"
+            />
+            <small
+              class="text-danger"
+              *ngIf="teacherForm.controls['lastName'].invalid &&
+                     (teacherForm.controls['lastName'].touched ||
+                      teacherForm.controls['lastName'].dirty)"
+            >
+              <span *ngIf="teacherForm.controls['lastName'].errors?.['required']">Last name is required</span>
+              <span *ngIf="teacherForm.controls['lastName'].errors?.['minlength']">Minimum 3 characters</span>
+            </small>
+          </div>
+        </div>
 
-    <!-- ========== Phone Number Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Phone Number</b></label>
-      <input
-        type="text"
-        formControlName="tel"
-        class="form-control"
-        placeholder="Enter Phone Number"
-      />
-      <div
-        *ngIf="
-          teacherForm.controls['tel'].invalid &&
-          (teacherForm.controls['tel'].touched ||
-            teacherForm.controls['tel'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['tel'].errors?.['required']"
-          >Phone is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['tel'].errors?.['pattern']"
-          >Phone must be 8 digits</small
-        >
-      </div>
-    </div>
+        <!-- Contact Information Section -->
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter email address"
+          />
+          <small
+            class="text-danger"
+            *ngIf="teacherForm.controls['email'].invalid &&
+                   (teacherForm.controls['email'].touched ||
+                    teacherForm.controls['email'].dirty)"
+          >
+            <span *ngIf="teacherForm.controls['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="teacherForm.controls['email'].errors?.['email']">Invalid email format</span>
+          </small>
+        </div>
 
-    <!-- ========== Address Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Home Address</b></label>
-      <textarea
-        formControlName="address"
-        class="form-control"
-        placeholder="Enter Full Address"
-      ></textarea>
-      <div
-        *ngIf="
-          teacherForm.controls['address'].invalid &&
-          (teacherForm.controls['address'].touched ||
-            teacherForm.controls['address'].dirty)
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['address'].errors?.['required']"
-          >Address is required</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['address'].errors?.['minlength']"
-          >Address must be at least 10 characters</small
-        >
-      </div>
-    </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="tel"
+              class="form-control"
+              placeholder="8-digit phone number"
+            />
+            <small
+              class="text-danger"
+              *ngIf="teacherForm.controls['tel'].invalid &&
+                     (teacherForm.controls['tel'].touched ||
+                      teacherForm.controls['tel'].dirty)"
+            >
+              <span *ngIf="teacherForm.controls['tel'].errors?.['required']">Phone is required</span>
+              <span *ngIf="teacherForm.controls['tel'].errors?.['pattern']">Must be 8 digits</span>
+            </small>
+          </div>
 
-    <!-- ========== Specialty Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Specialty</b></label>
-      <select formControlName="specialty" class="form-control">
-        <option value="">-- Choose Specialty --</option>
-        <option>Mathematics</option>
-        <option>Physics</option>
-        <option>Computer Science</option>
-        <option>Chemistry</option>
-        <option>Biology</option>
-        <option>English Language</option>
-        <option>French Language</option>
-        <option>Arabic Language</option>
-        <option>History & Geography</option>
-        <option>Physical Education</option>
-        <option>Philosophy</option>
-      </select>
-      <small
-        class="text-danger"
-        *ngIf="
-          teacherForm.controls['specialty'].invalid &&
-          teacherForm.controls['specialty'].touched
-        "
-      >
-        Please select a specialty
-      </small>
-    </div>
+          <div class="form-group">
+            <label>Home Address <span class="required">*</span></label>
+            <input
+              type="text"
+              formControlName="address"
+              class="form-control"
+              placeholder="Enter full address"
+            />
+            <small
+              class="text-danger"
+              *ngIf="teacherForm.controls['address'].invalid &&
+                     (teacherForm.controls['address'].touched ||
+                      teacherForm.controls['address'].dirty)"
+            >
+              <span *ngIf="teacherForm.controls['address'].errors?.['required']">Address is required</span>
+              <span *ngIf="teacherForm.controls['address'].errors?.['minlength']">Minimum 10 characters</span>
+            </small>
+          </div>
+        </div>
 
-    <!-- ========== Password Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Password</b></label>
-      <input
-        type="password"
-        formControlName="password"
-        class="form-control"
-        placeholder="Enter Password"
-      />
-      <div
-        *ngIf="
-          teacherForm.controls['password'].invalid &&
-          teacherForm.controls['password'].touched
-        "
-      >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['password'].errors?.['required']"
-          >Password is required</small
+        <!-- Specialty Selection -->
+        <div class="form-group">
+          <label>Specialty <span class="required">*</span></label>
+          <select formControlName="specialty" class="form-control">
+            <option value="">-- Choose Specialty --</option>
+            <option>Mathematics</option>
+            <option>Physics</option>
+            <option>Computer Science</option>
+            <option>Chemistry</option>
+            <option>Biology</option>
+            <option>English Language</option>
+            <option>French Language</option>
+            <option>Arabic Language</option>
+            <option>History & Geography</option>
+            <option>Physical Education</option>
+            <option>Philosophy</option>
+          </select>
+          <small
+            class="text-danger"
+            *ngIf="teacherForm.controls['specialty'].invalid &&
+                   teacherForm.controls['specialty'].touched"
+          >
+            Please select a specialty
+          </small>
+        </div>
+
+        <!-- Password Section -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Password <span class="required">*</span></label>
+            <input
+              type="password"
+              formControlName="password"
+              class="form-control"
+              placeholder="Create password"
+            />
+            <small
+              class="text-danger"
+              *ngIf="teacherForm.controls['password'].invalid &&
+                     teacherForm.controls['password'].touched"
+            >
+              <span *ngIf="teacherForm.controls['password'].errors?.['required']">Password is required</span>
+              <span *ngIf="teacherForm.controls['password'].errors?.['minlength']">Minimum 6 characters</span>
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Confirm Password <span class="required">*</span></label>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              class="form-control"
+              placeholder="Confirm password"
+            />
+            <small
+              class="text-danger"
+              *ngIf="teacherForm.controls['confirmPassword'].errors?.['required'] &&
+                     teacherForm.controls['confirmPassword'].touched"
+            >
+              Confirm password is required
+            </small>
+            <div
+              class="password-match"
+              [class.match]="teacherForm.get('confirmPassword')?.value &&
+                             !teacherForm.errors?.['passwordMismatch']"
+              [class.mismatch]="teacherForm.get('confirmPassword')?.value &&
+                                teacherForm.errors?.['passwordMismatch']"
+              *ngIf="teacherForm.get('confirmPassword')?.touched"
+            >
+              <span *ngIf="!teacherForm.errors?.['passwordMismatch']">✓ Passwords match</span>
+              <span *ngIf="teacherForm.errors?.['passwordMismatch']">✗ Passwords do not match</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CV Upload Section -->
+        <div class="form-group">
+          <label>Upload CV (PDF) <span class="required">*</span></label>
+          <div class="file-upload-wrapper">
+            <input
+              type="file"
+              class="form-control"
+              accept=".pdf"
+            />
+            <div class="file-upload-icon">📄</div>
+            <div class="file-upload-text">Click or Drag to Upload CV</div>
+            <div class="file-upload-hint">Format: PDF only (Max 5MB)</div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-message">
+          ⚠️ {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="teacherForm.invalid"
         >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['password'].errors?.['minlength']"
-          >Min 6 characters</small
-        >
-        <small
-          class="text-danger"
-          *ngIf="teacherForm.controls['password'].errors?.['pattern']"
-          >Upper, Lower and Number required</small
-        >
-      </div>
+          Submit Application
+        </button>
+      </form>
     </div>
-
-    <!-- ========== Confirm Password Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Repeat Password</b></label>
-      <input
-        type="password"
-        formControlName="confirmPassword"
-        class="form-control"
-        placeholder="Repeat Password"
-      />
-      <small
-        class="text-danger"
-        *ngIf="
-      teacherForm.controls['confirmPassword'].errors?.['required'] &&
-      teacherForm.controls['confirmPassword'].touched
-    "
-      >
-        Confirm password is required
-      </small>
-      <small
-        class="text-danger"
-        *ngIf="
-      teacherForm.errors?.['passwordMismatch'] &&
-      teacherForm.controls['password'].value &&
-      teacherForm.controls['confirmPassword'].touched
-    "
-      >
-        Passwords do not match
-      </small>
-    </div>
-
-    <!-- ========== CV Upload Field ========== -->
-    <div class="form-group mb-3">
-      <label><b>Upload CV (PDF)</b></label>
-      <input type="file" class="form-control" accept=".pdf" />
-    </div>
-    <hr />
-
-    <!-- ========== Submit Button ========== -->
-    <button type="submit" class="registerbtn" >
-      Register Teacher
-    </button>
-    <small class="text-danger">{{errorMessage}}</small>
   </div>
-</form>
+</div>
+
